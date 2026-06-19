@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Placas de Preço — Supermercado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Caveat:wght@400;700&family=Patrick+Hand&family=Gochi+Hand&family=Shadows+Into+Light+Two&family=Rock+Salt&family=Architects+Daughter&family=Reenie+Beanie&family=Just+Another+Hand&family=Lilita+One&family=Boogaloo&family=Luckiest+Guy&family=Fredoka+One&display=swap" rel="stylesheet">
+<style>
+  /* ===== RESET E BASE ===== */
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #1a1a2e;
+    color: #e0e0e0;
+    min-height: 100vh;
+  }
+
+  /* ===== LAYOUT PRINCIPAL ===== */
+  .app {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+  }
+
+  /* ===== PAINEL DE EDIÇÃO ===== */
+  .painel {
+    width: 360px;
+    min-width: 360px;
+    background: #16213e;
+    border-right: 1px solid #0f3460;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .painel h1 {
+    font-size: 18px;
+    color: #e94560;
+    text-align: center;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #0f3460;
+    font-family: 'Permanent Marker', cursive;
+    letter-spacing: 1px;
+  }
+
+  /* Grupos de campo */
+  .grupo {
+    background: #1a1a40;
+    border: 1px solid #0f3460;
+    border-radius: 8px;
+    padding: 12px;
+  }
+
+  .grupo-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .grupo-header label {
+    font-weight: 600;
+    font-size: 13px;
+    color: #e94560;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .grupo-header input[type="checkbox"] {
+    accent-color: #e94560;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+  }
+
+  /* Inputs */
+  .campo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+
+  .campo:last-child { margin-bottom: 0; }
+
+  .campo label {
+    font-size: 11px;
+    color: #8892b0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .campo input[type="text"],
+  .campo input[type="number"],
+  .campo select {
+    background: #0a0a23;
+    border: 1px solid #0f3460;
+    border-radius: 4px;
+    color: #e0e0e0;
+    padding: 8px 10px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .campo input:focus, .campo select:focus {
+    border-color: #e94560;
+  }
+
+  .campo input[type="color"] {
+    width: 36px;
+    height: 30px;
+    border: 1px solid #0f3460;
+    border-radius: 4px;
+    background: #0a0a23;
+    cursor: pointer;
+    padding: 2px;
+  }
+
+  /* Linha horizontal de controles */
+  .linha {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+  }
+
+  .linha .campo { flex: 1; }
+
+  /* Slider de tamanho */
+  .slider-grupo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .slider-grupo input[type="range"] {
+    flex: 1;
+    accent-color: #e94560;
+    height: 4px;
+  }
+
+  .slider-grupo span {
+    font-size: 12px;
+    color: #8892b0;
+    min-width: 32px;
+    text-align: right;
+  }
+
+  /* Posição X/Y */
+  .pos-grupo {
+    display: flex;
+    gap: 8px;
+  }
+
+  .pos-grupo .campo {
+    flex: 1;
+  }
+
+  .pos-grupo input[type="number"] {
+    width: 100%;
+    padding: 6px 8px;
+    font-size: 13px;
+  }
+
+  /* Checkbox inline */
+  .check-linha {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .check-linha label {
+    font-size: 12px;
+    color: #8892b0;
+    cursor: pointer;
+  }
+
+  .check-linha input {
+    accent-color: #e94560;
+    cursor: pointer;
+  }
+
+  /* ===== BOTÕES DE AÇÃO ===== */
+  .acoes {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    flex: 1;
+    min-width: 90px;
+    padding: 10px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+
+  .btn:hover { opacity: 0.9; }
+  .btn:active { transform: scale(0.97); }
+
+  .btn-imprimir { background: #e94560; color: white; }
+  .btn-limpar { background: #0f3460; color: #e0e0e0; }
+  .btn-duplicar { background: #533483; color: #e0e0e0; }
+
+  /* ===== ÁREA DE PREVIEW ===== */
+  .preview-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #12121f;
+    position: relative;
+    overflow: auto;
+    padding: 20px;
+  }
+
+  /* ===== A PLACA ===== */
+  .placa-container {
+    width: 148mm;
+    height: 210mm;
+    position: relative;
+    background: #FFD700;
+    border-radius: 4px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .placa {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    font-family: 'Permanent Marker', cursive;
+    text-transform: uppercase;
+  }
+
+  /* Elementos arrastáveis */
+  .elem {
+    position: absolute;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    white-space: pre-wrap;
+    word-break: break-word;
+    transition: outline 0.15s;
+    outline: 2px solid transparent;
+    outline-offset: 4px;
+    padding: 2px 4px;
+  }
+
+  .elem:hover { outline-color: rgba(233, 69, 96, 0.4); }
+  .elem.arrastando { cursor: grabbing; outline-color: #e94560; z-index: 100; }
+  .elem.selecionado { outline-color: #e94560; }
+
+  /* Elemento: nome do produto */
+  #el-nome {
+    top: 10%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #000000;
+    font-size: 52px;
+    line-height: 1.1;
+    width: max-content;
+    max-width: 88%;
+    font-family: 'Permanent Marker', cursive;
+  }
+
+  /* Elemento: preço */
+  #el-preco {
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #CC0000;
+    font-size: 110px;
+    line-height: 1;
+    font-family: 'Permanent Marker', cursive;
+    white-space: nowrap;
+    width: max-content;
+  }
+
+  /* Elemento: R$ */
+  #el-cifrao {
+    bottom: 6%;
+    left: 8%;
+    color: #000000;
+    font-size: 28px;
+    font-family: 'Permanent Marker', cursive;
+  }
+
+  /* Elemento: unidade */
+  #el-unidade {
+    bottom: 6%;
+    right: 8%;
+    color: #000000;
+    font-size: 28px;
+    text-align: right;
+    font-family: 'Permanent Marker', cursive;
+  }
+
+  /* Elemento: info extra */
+  #el-extra {
+    bottom: 14%;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    color: #000000;
+    font-size: 16px;
+    font-family: 'Permanent Marker', cursive;
+  }
+
+  /* ===== RESPONSIVO MOBILE ===== */
+  @media (max-width: 700px) {
+    .app {
+      flex-direction: column;
+      height: auto;
+      min-height: 100vh;
+      overflow: visible;
+    }
+
+    .painel {
+      width: 100%;
+      min-width: unset;
+      border-right: none;
+      border-bottom: 1px solid #0f3460;
+      max-height: 52vh;
+      overflow-y: auto;
+      padding: 14px;
+      gap: 10px;
+    }
+
+    .painel h1 { font-size: 15px; padding-bottom: 8px; }
+
+    .grupo { padding: 10px; }
+
+    .preview-area {
+      flex: 1;
+      padding: 12px 12px 24px;
+      overflow: visible;
+      align-items: flex-start;
+    }
+
+    /* placa escalada via JS — reservar altura para evitar colapso */
+    .placa-container {
+      transform-origin: top center;
+    }
+
+    .acoes { gap: 6px; }
+    .btn { padding: 10px 8px; font-size: 12px; }
+  }
+
+  /* ===== CSS DE IMPRESSÃO ===== */
+  @media print {
+    @page {
+      size: 148mm 210mm;
+      margin: 0;
+    }
+
+    body {
+      background: transparent !important;
+    }
+
+    * {
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+      color-adjust: exact !important;
+    }
+
+    /* Esconder tudo que não é placa */
+    .painel { display: none !important; }
+
+    .app {
+      display: block;
+      height: auto;
+      overflow: visible;
+    }
+
+    .preview-area {
+      display: block;
+      background: transparent !important;
+      padding: 0;
+      overflow: visible;
+    }
+
+    .placa-container {
+      background: transparent !important;
+      box-shadow: none !important;
+      border-radius: 0;
+      width: 148mm !important;
+      height: 210mm !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      position: relative !important;
+    }
+
+    .elem {
+      outline: none !important;
+      display: block !important;
+      visibility: visible !important;
+    }
+
+    .elem.oculto { display: none !important; }
+  }
+
+  /* Ocultar elementos desativados na tela */
+  .elem.oculto { opacity: 0.15; pointer-events: none; }
+
+  /* ===== SCROLLBAR ===== */
+  .painel::-webkit-scrollbar { width: 6px; }
+  .painel::-webkit-scrollbar-track { background: #16213e; }
+  .painel::-webkit-scrollbar-thumb { background: #0f3460; border-radius: 3px; }
+  .painel::-webkit-scrollbar-thumb:hover { background: #e94560; }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- ===== PAINEL LATERAL ===== -->
+  <div class="painel">
+    <h1>Placas de Preco</h1>
+
+    <!-- PRODUTO -->
+    <div class="grupo">
+      <div class="grupo-header">
+        <label>Produto</label>
+        <input type="checkbox" id="vis-nome" checked title="Mostrar/ocultar">
+      </div>
+      <div class="campo">
+        <label>Nome do produto</label>
+        <input type="text" id="inp-nome" placeholder="Ex: LIMAO TAITI" autofocus>
+      </div>
+      <div class="campo">
+        <label>Fonte do nome</label>
+        <select id="fonte-nome">
+          <optgroup label="Manuscritas (letra de placa)">
+            <option value="'Permanent Marker', cursive" selected>Permanent Marker</option>
+            <option value="'Caveat', cursive">Caveat</option>
+            <option value="'Patrick Hand', cursive">Patrick Hand</option>
+            <option value="'Gochi Hand', cursive">Gochi Hand</option>
+            <option value="'Shadows Into Light Two', cursive">Shadows Into Light</option>
+            <option value="'Rock Salt', cursive">Rock Salt</option>
+            <option value="'Architects Daughter', cursive">Architects Daughter</option>
+            <option value="'Reenie Beanie', cursive">Reenie Beanie</option>
+            <option value="'Just Another Hand', cursive">Just Another Hand</option>
+          </optgroup>
+          <optgroup label="Display (cartoon)">
+            <option value="'Lilita One', cursive">Lilita One</option>
+            <option value="'Boogaloo', cursive">Boogaloo</option>
+            <option value="'Luckiest Guy', cursive">Luckiest Guy</option>
+            <option value="'Fredoka One', cursive">Fredoka One</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="campo">
+        <label>Tamanho da fonte (px)</label>
+        <div class="slider-grupo">
+          <input type="range" id="size-nome" min="20" max="160" value="52">
+          <span id="size-nome-val">52</span>
+        </div>
+      </div>
+      <div class="linha">
+        <div class="campo">
+          <label>Cor</label>
+          <input type="color" id="cor-nome" value="#000000">
+        </div>
+      </div>
+    </div>
+
+    <!-- PRECO -->
+    <div class="grupo">
+      <div class="grupo-header">
+        <label>Preco</label>
+        <input type="checkbox" id="vis-preco" checked title="Mostrar/ocultar">
+      </div>
+      <div class="campo">
+        <label>Valor (ex: 399 = 3,99)</label>
+        <input type="text" id="inp-preco" placeholder="Ex: 3,99" inputmode="decimal">
+      </div>
+      <div class="campo">
+        <label>Fonte do preco</label>
+        <select id="fonte-preco">
+          <optgroup label="Manuscritas (letra de placa)">
+            <option value="'Permanent Marker', cursive" selected>Permanent Marker</option>
+            <option value="'Caveat', cursive">Caveat</option>
+            <option value="'Patrick Hand', cursive">Patrick Hand</option>
+            <option value="'Gochi Hand', cursive">Gochi Hand</option>
+            <option value="'Shadows Into Light Two', cursive">Shadows Into Light</option>
+            <option value="'Rock Salt', cursive">Rock Salt</option>
+            <option value="'Architects Daughter', cursive">Architects Daughter</option>
+            <option value="'Reenie Beanie', cursive">Reenie Beanie</option>
+            <option value="'Just Another Hand', cursive">Just Another Hand</option>
+          </optgroup>
+          <optgroup label="Display (cartoon)">
+            <option value="'Lilita One', cursive">Lilita One</option>
+            <option value="'Boogaloo', cursive">Boogaloo</option>
+            <option value="'Luckiest Guy', cursive">Luckiest Guy</option>
+            <option value="'Fredoka One', cursive">Fredoka One</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="campo">
+        <label>Tamanho da fonte (px)</label>
+        <div class="slider-grupo">
+          <input type="range" id="size-preco" min="50" max="180" value="110">
+          <span id="size-preco-val">110</span>
+        </div>
+      </div>
+      <div class="linha">
+        <div class="campo">
+          <label>Cor</label>
+          <input type="color" id="cor-preco" value="#CC0000">
+        </div>
+      </div>
+    </div>
+
+    <!-- CIFRAO -->
+    <div class="grupo">
+      <div class="grupo-header">
+        <label>Cifrao (R$)</label>
+        <input type="checkbox" id="vis-cifrao" checked title="Mostrar/ocultar">
+      </div>
+      <div class="campo">
+        <label>Tamanho da fonte (px)</label>
+        <div class="slider-grupo">
+          <input type="range" id="size-cifrao" min="16" max="60" value="28">
+          <span id="size-cifrao-val">28</span>
+        </div>
+      </div>
+      <div class="linha">
+        <div class="campo">
+          <label>Cor</label>
+          <input type="color" id="cor-cifrao" value="#000000">
+        </div>
+      </div>
+    </div>
+
+    <!-- UNIDADE -->
+    <div class="grupo">
+      <div class="grupo-header">
+        <label>Unidade</label>
+        <input type="checkbox" id="vis-unidade" checked title="Mostrar/ocultar">
+      </div>
+      <div class="campo">
+        <label>Unidade de medida</label>
+        <select id="inp-unidade">
+          <option value="Kg">Kg</option>
+          <option value="g">g</option>
+          <option value="Un">Un</option>
+          <option value="Pct">Pct</option>
+          <option value="Cx">Cx</option>
+          <option value="Lt">Lt</option>
+          <option value="Ml">Ml</option>
+          <option value="Bnd">Bnd</option>
+          <option value="Fdl">Fdl</option>
+          <option value="BDJ">BDJ</option>
+          <option value="Dz">Dz</option>
+          <option value="_custom">Outro...</option>
+        </select>
+      </div>
+      <div class="campo" id="campo-unidade-custom" style="display:none">
+        <label>Unidade personalizada</label>
+        <input type="text" id="inp-unidade-custom" placeholder="Digite a unidade">
+      </div>
+      <div class="campo">
+        <label>Tamanho da fonte (px)</label>
+        <div class="slider-grupo">
+          <input type="range" id="size-unidade" min="16" max="60" value="28">
+          <span id="size-unidade-val">28</span>
+        </div>
+      </div>
+      <div class="linha">
+        <div class="campo">
+          <label>Cor</label>
+          <input type="color" id="cor-unidade" value="#000000">
+        </div>
+      </div>
+    </div>
+
+    <!-- INFO EXTRA -->
+    <div class="grupo">
+      <div class="grupo-header">
+        <label>Info Extra</label>
+        <input type="checkbox" id="vis-extra" checked title="Mostrar/ocultar">
+      </div>
+      <div class="campo">
+        <label>Texto (validade, gramatura, etc.)</label>
+        <input type="text" id="inp-extra" placeholder="Ex: VAL 04/04/26">
+      </div>
+      <div class="campo">
+        <label>Tamanho da fonte (px)</label>
+        <div class="slider-grupo">
+          <input type="range" id="size-extra" min="10" max="36" value="16">
+          <span id="size-extra-val">16</span>
+        </div>
+      </div>
+      <div class="linha">
+        <div class="campo">
+          <label>Cor</label>
+          <input type="color" id="cor-extra" value="#000000">
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTOES -->
+    <div class="acoes">
+      <button class="btn btn-imprimir" onclick="imprimir()">Imprimir</button>
+      <button class="btn btn-limpar" onclick="limpar()">Limpar</button>
+      <button class="btn btn-duplicar" onclick="duplicar()">Duplicar</button>
+    </div>
+  </div>
+
+  <!-- ===== PREVIEW DA PLACA ===== -->
+  <div class="preview-area">
+    <div class="placa-container">
+      <div class="placa" id="placa">
+        <div class="elem" id="el-nome">PRODUTO</div>
+        <div class="elem" id="el-preco">
+          <span class="preco-texto">0,00</span>
+        </div>
+        <div class="elem" id="el-cifrao">R$</div>
+        <div class="elem" id="el-unidade">Kg</div>
+        <div class="elem" id="el-extra"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== REFERENCIAS ===== */
+const placa = document.getElementById('placa');
+const elNome = document.getElementById('el-nome');
+const elPreco = document.getElementById('el-preco');
+const elCifrao = document.getElementById('el-cifrao');
+const elUnidade = document.getElementById('el-unidade');
+const elExtra = document.getElementById('el-extra');
+
+/* Inputs */
+const inpNome = document.getElementById('inp-nome');
+const inpPreco = document.getElementById('inp-preco');
+const inpUnidade = document.getElementById('inp-unidade');
+const inpUnidadeCustom = document.getElementById('inp-unidade-custom');
+const campoUnidadeCustom = document.getElementById('campo-unidade-custom');
+const inpExtra = document.getElementById('inp-extra');
+const fonteNome = document.getElementById('fonte-nome');
+const fontePreco = document.getElementById('fonte-preco');
+
+/* Tamanhos */
+const sizeNome = document.getElementById('size-nome');
+const sizePreco = document.getElementById('size-preco');
+const sizeCifrao = document.getElementById('size-cifrao');
+const sizeUnidade = document.getElementById('size-unidade');
+const sizeExtra = document.getElementById('size-extra');
+
+/* Cores */
+const corNome = document.getElementById('cor-nome');
+const corPreco = document.getElementById('cor-preco');
+const corCifrao = document.getElementById('cor-cifrao');
+const corUnidade = document.getElementById('cor-unidade');
+const corExtra = document.getElementById('cor-extra');
+
+/* Visibilidade */
+const visNome = document.getElementById('vis-nome');
+const visPreco = document.getElementById('vis-preco');
+const visCifrao = document.getElementById('vis-cifrao');
+const visUnidade = document.getElementById('vis-unidade');
+const visExtra = document.getElementById('vis-extra');
+
+/* ===== ATUALIZACAO EM TEMPO REAL ===== */
+
+function atualizarPlaca() {
+  /* Nome */
+  elNome.textContent = inpNome.value || 'PRODUTO';
+  elNome.style.fontSize = sizeNome.value + 'px';
+  elNome.style.color = corNome.value;
+  elNome.style.fontFamily = fonteNome.value;
+  document.getElementById('size-nome-val').textContent = sizeNome.value;
+  elNome.classList.toggle('oculto', !visNome.checked);
+
+  /* Preco */
+  const precoTexto = elPreco.querySelector('.preco-texto');
+  precoTexto.textContent = inpPreco.value || '0,00';
+  elPreco.style.fontSize = sizePreco.value + 'px';
+  elPreco.style.color = corPreco.value;
+  elPreco.style.fontFamily = fontePreco.value;
+  document.getElementById('size-preco-val').textContent = sizePreco.value;
+  elPreco.classList.toggle('oculto', !visPreco.checked);
+
+  /* Cifrao */
+  elCifrao.style.fontSize = sizeCifrao.value + 'px';
+  elCifrao.style.color = corCifrao.value;
+  document.getElementById('size-cifrao-val').textContent = sizeCifrao.value;
+  elCifrao.classList.toggle('oculto', !visCifrao.checked);
+
+  /* Unidade */
+  const unidadeVal = inpUnidade.value === '_custom' ? inpUnidadeCustom.value : inpUnidade.value;
+  elUnidade.textContent = unidadeVal || 'Kg';
+  elUnidade.style.fontSize = sizeUnidade.value + 'px';
+  elUnidade.style.color = corUnidade.value;
+  document.getElementById('size-unidade-val').textContent = sizeUnidade.value;
+  elUnidade.classList.toggle('oculto', !visUnidade.checked);
+  campoUnidadeCustom.style.display = inpUnidade.value === '_custom' ? 'flex' : 'none';
+
+  /* Extra */
+  elExtra.textContent = inpExtra.value;
+  elExtra.style.fontSize = sizeExtra.value + 'px';
+  elExtra.style.color = corExtra.value;
+  document.getElementById('size-extra-val').textContent = sizeExtra.value;
+  elExtra.classList.toggle('oculto', !visExtra.checked);
+}
+
+/* Vincular todos os inputs ao update */
+[inpNome, inpPreco, inpUnidade, inpUnidadeCustom, inpExtra,
+ sizeNome, sizePreco, sizeCifrao, sizeUnidade, sizeExtra,
+ corNome, corPreco, corCifrao, corUnidade, corExtra,
+ visNome, visPreco, visCifrao, visUnidade, visExtra,
+ fonteNome, fontePreco
+].forEach(el => {
+  el.addEventListener('input', atualizarPlaca);
+  el.addEventListener('change', atualizarPlaca);
+});
+
+/* ===== FORMATACAO AUTOMATICA DO PRECO ===== */
+inpPreco.addEventListener('input', function() {
+  let val = this.value.replace(/[^\d,\.]/g, '');
+  /* Se digitou so numeros sem virgula e tem 3+ digitos, formatar */
+  if (/^\d{3,}$/.test(val)) {
+    val = val.slice(0, -2) + ',' + val.slice(-2);
+    this.value = val;
+  }
+});
+
+/* ===== ARRASTAR ELEMENTOS (Pointer Events) =====
+   Posicao guardada em % da placa e ancorada no CENTRO do elemento.
+   Resolucao-independente: igual na tela e na impressao. Um unico
+   caminho de codigo para mouse e toque, com setPointerCapture para
+   nao perder o rastreamento ao sair da area. */
+let elemSelecionado = null;
+let arraste = null;
+
+document.querySelectorAll('.elem').forEach(elem => {
+  elem.addEventListener('pointerdown', iniciarArraste);
+});
+
+function iniciarArraste(e) {
+  if (e.button > 0) return; /* so botao principal / toque */
+  const elem = e.currentTarget;
+  e.preventDefault();
+  selecionarElem(elem);
+
+  const placaRect = placa.getBoundingClientRect();
+  const elemRect = elem.getBoundingClientRect();
+
+  /* Centro atual do elemento, em % da placa */
+  const centroXpct = ((elemRect.left + elemRect.width / 2) - placaRect.left) / placaRect.width * 100;
+  const centroYpct = ((elemRect.top + elemRect.height / 2) - placaRect.top) / placaRect.height * 100;
+
+  arraste = {
+    elem,
+    pointerX: e.clientX,
+    pointerY: e.clientY,
+    baseX: centroXpct,
+    baseY: centroYpct,
+    placaW: placaRect.width,
+    placaH: placaRect.height,
+  };
+
+  /* Fixa no modelo "centro" sem pulo visual */
+  aplicarPosicao(elem, centroXpct, centroYpct);
+  elem.classList.add('arrastando');
+  elem.setPointerCapture(e.pointerId);
+  elem.addEventListener('pointermove', arrastar);
+  elem.addEventListener('pointerup', pararArraste);
+  elem.addEventListener('pointercancel', pararArraste);
+}
+
+function arrastar(e) {
+  if (!arraste) return;
+  const dxPct = (e.clientX - arraste.pointerX) / arraste.placaW * 100;
+  const dyPct = (e.clientY - arraste.pointerY) / arraste.placaH * 100;
+
+  /* Margem = metade do elemento em %, garante que nao sai do papel */
+  const halfW = (arraste.elem.offsetWidth  / 2) / arraste.placaW * 100;
+  const halfH = (arraste.elem.offsetHeight / 2) / arraste.placaH * 100;
+
+  const xPct = Math.max(halfW, Math.min(100 - halfW, arraste.baseX + dxPct));
+  const yPct = Math.max(halfH, Math.min(100 - halfH, arraste.baseY + dyPct));
+  aplicarPosicao(arraste.elem, xPct, yPct);
+}
+
+function aplicarPosicao(elem, xPct, yPct) {
+  elem.style.left = xPct + '%';
+  elem.style.top = yPct + '%';
+  elem.style.right = 'auto';
+  elem.style.bottom = 'auto';
+  elem.style.transform = 'translate(-50%, -50%)';
+}
+
+function pararArraste() {
+  if (!arraste) return;
+  const elem = arraste.elem;
+  elem.classList.remove('arrastando');
+  elem.removeEventListener('pointermove', arrastar);
+  elem.removeEventListener('pointerup', pararArraste);
+  elem.removeEventListener('pointercancel', pararArraste);
+  arraste = null;
+}
+
+function selecionarElem(elem) {
+  if (elemSelecionado) elemSelecionado.classList.remove('selecionado');
+  elemSelecionado = elem;
+  elem.classList.add('selecionado');
+}
+
+/* Desselecionar ao clicar na placa (fora de elementos) */
+placa.addEventListener('click', function(e) {
+  if (e.target === placa && elemSelecionado) {
+    elemSelecionado.classList.remove('selecionado');
+    elemSelecionado = null;
+  }
+});
+
+/* ===== ACOES ===== */
+
+function imprimir() {
+  window.print();
+}
+
+function limpar() {
+  inpNome.value = '';
+  inpPreco.value = '';
+  inpUnidade.value = 'Kg';
+  inpUnidadeCustom.value = '';
+  inpExtra.value = '';
+  fonteNome.value = "'Permanent Marker', cursive";
+  fontePreco.value = "'Permanent Marker', cursive";
+
+  /* Resetar tamanhos */
+  sizeNome.value = 52;
+  sizePreco.value = 110;
+  sizeCifrao.value = 28;
+  sizeUnidade.value = 28;
+  sizeExtra.value = 16;
+
+  /* Resetar cores */
+  corNome.value = '#000000';
+  corPreco.value = '#CC0000';
+  corCifrao.value = '#000000';
+  corUnidade.value = '#000000';
+  corExtra.value = '#000000';
+
+  /* Resetar visibilidade */
+  visNome.checked = true;
+  visPreco.checked = true;
+  visCifrao.checked = true;
+  visUnidade.checked = true;
+  visExtra.checked = true;
+
+  /* Resetar posicoes dos elementos */
+  resetarPosicoes();
+  atualizarPlaca();
+  inpNome.focus();
+}
+
+function resetarPosicoes() {
+  /* Limpar estilos inline para voltar ao CSS padrao */
+  [elNome, elPreco, elCifrao, elUnidade, elExtra].forEach(el => {
+    el.style.transform = '';
+    el.style.left = '';
+    el.style.top = '';
+    el.style.right = '';
+    el.style.bottom = '';
+  });
+}
+
+function duplicar() {
+  /* Feedback visual */
+  const btn = document.querySelector('.btn-duplicar');
+  const textoOriginal = btn.textContent;
+  btn.textContent = 'Copiado!';
+  setTimeout(() => { btn.textContent = textoOriginal; }, 1000);
+
+  /* Manter tudo menos o preco — foco no campo de preco para proxima placa */
+  inpPreco.value = '';
+  inpPreco.focus();
+  atualizarPlaca();
+}
+
+/* ===== ESCALA MOBILE ===== */
+const placaContainerEl = document.querySelector('.placa-container');
+
+function escalarPlaca() {
+  if (window.innerWidth <= 700) {
+    const available = window.innerWidth - 24;
+    const naturalW = placaContainerEl.offsetWidth;
+    const scale = Math.min(1, available / naturalW);
+    placaContainerEl.style.transform = `scale(${scale})`;
+    /* reservar altura real na página para não colapsar o preview-area */
+    placaContainerEl.parentElement.style.minHeight =
+      Math.round(placaContainerEl.offsetHeight * scale + 24) + 'px';
+  } else {
+    placaContainerEl.style.transform = '';
+    placaContainerEl.parentElement.style.minHeight = '';
+  }
+}
+
+window.addEventListener('resize', escalarPlaca);
+
+/* ===== INICIALIZACAO ===== */
+atualizarPlaca();
+escalarPlaca();
+</script>
+</body>
+</html>
