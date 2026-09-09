@@ -62,68 +62,107 @@
 
   main{
     flex:1;
-    padding:18px 16px 90px;
+    padding:16px 16px 90px;
     display:flex;
     flex-direction:column;
-    gap:16px;
+    gap:14px;
   }
 
-  .screen{display:none;flex-direction:column;gap:16px;animation:fadeIn .25s ease;}
+  .screen{display:none;flex-direction:column;gap:14px;animation:fadeIn .25s ease;}
   .screen.ativa{display:flex;}
   @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 
-  /* ===== HOME ===== */
-  .hero{
-    text-align:center;
-    padding:14px 6px 4px;
-  }
-  .hero h1{
-    font-family:'Baloo 2', sans-serif;
-    font-size:26px;
-    color:#fff;
-    line-height:1.25;
-  }
-  .hero h1 span{color:#e94560;}
-  .hero p{
-    margin-top:8px;
-    font-size:14px;
-    color:#b9bcd0;
-  }
+  /* ===== TELA DO MAPA ===== */
+  .mapa-intro{text-align:center;padding:2px 4px;}
+  .mapa-intro h1{font-family:'Baloo 2',sans-serif;font-size:19px;color:#fff;}
+  .mapa-intro p{font-size:12.5px;color:#9498b3;margin-top:4px;}
 
-  .fases{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-  }
-  .fase-card{
-    background:#16213e;
-    border:1px solid #0f3460;
-    border-radius:16px;
-    padding:16px;
-    display:flex;
-    align-items:center;
-    gap:14px;
-    cursor:pointer;
-    transition:transform .12s ease, border-color .12s ease;
-    text-align:left;
-    color:inherit;
-  }
-  .fase-card:active{transform:scale(.97);}
-  .fase-card .icone{
-    width:52px;height:52px;
-    min-width:52px;
-    border-radius:14px;
+  .selos-estacoes{display:flex;justify-content:center;gap:10px;}
+  .selo{
+    width:38px;height:38px;border-radius:11px;
+    background:#16213e;border:1.5px solid #0f3460;
     display:flex;align-items:center;justify-content:center;
-    font-size:26px;
+    font-size:18px;opacity:.45;transition:all .2s ease;
   }
-  .fase-card .txt h3{font-size:16px;color:#fff;font-family:'Baloo 2',sans-serif;}
-  .fase-card .txt p{font-size:12.5px;color:#9498b3;margin-top:3px;}
-  .fase-card .seta{margin-left:auto;color:#e94560;font-size:20px;}
+  .selo.feita{opacity:1;border-color:#2d9d63;background:#153d2b;box-shadow:0 0 0 2px #2d9d6333;}
 
-  .fase-1 .icone{background:#2d6a4f33;color:#52d68f;}
-  .fase-2 .icone{background:#e9456020;color:#e94560;}
-  .fase-3 .icone{background:#4361ee22;color:#8aa4ff;}
+  .mapa-wrap{
+    position:relative;
+    width:100%;
+    border-radius:18px;
+    overflow:hidden;
+    border:1px solid #0f3460;
+    touch-action:none;
+    user-select:none;
+  }
+  .mapa-wrap canvas{
+    display:block;
+    width:100%;
+    height:auto;
+  }
 
+  .btn-interagir{
+    position:absolute;
+    left:50%;
+    top:14px;
+    transform:translateX(-50%);
+    background:#e94560;
+    color:#fff;
+    border:none;
+    padding:9px 18px;
+    border-radius:999px;
+    font-family:'Baloo 2',sans-serif;
+    font-weight:700;
+    font-size:13.5px;
+    display:none;
+    align-items:center;
+    gap:6px;
+    box-shadow:0 4px 14px #00000055;
+    animation:pulso 1s infinite alternate;
+    z-index:3;
+  }
+  .btn-interagir.mostrar{display:flex;}
+  @keyframes pulso{from{transform:translateX(-50%) scale(1);}to{transform:translateX(-50%) scale(1.05);}}
+
+  .joystick-base{
+    position:absolute;
+    left:18px;
+    bottom:18px;
+    width:88px;height:88px;
+    border-radius:50%;
+    background:rgba(255,255,255,.07);
+    border:2px solid rgba(255,255,255,.22);
+    touch-action:none;
+    z-index:3;
+  }
+  .joystick-thumb{
+    position:absolute;
+    left:24px;top:24px;
+    width:40px;height:40px;
+    border-radius:50%;
+    background:rgba(233,69,96,.85);
+    pointer-events:none;
+  }
+
+  .dica-mapa{
+    font-size:11.5px;
+    color:#6d7191;
+    text-align:center;
+  }
+
+  .msg-completo{
+    display:none;
+    background:#153d2b;
+    border:1px solid #2d9d63;
+    border-radius:14px;
+    padding:12px 14px;
+    text-align:center;
+    font-size:13.5px;
+    color:#c8f5da;
+  }
+  .msg-completo.mostrar{display:block;}
+
+  /* ===== BOTOES GERAIS ===== */
   .btn{
     display:block;
     width:100%;
@@ -138,96 +177,37 @@
   }
   .btn-primario{background:#e94560;color:#fff;}
   .btn-primario:active{background:#d63852;}
-  .btn-secundario{background:#0f3460;color:#cfd6ff;}
   .btn-fantasma{background:transparent;color:#9498b3;border:1px solid #2a2f52;}
 
   /* ===== BARRA DE PROGRESSO DE FASE ===== */
-  .progresso-wrap{
-    display:flex;
-    align-items:center;
-    gap:10px;
-  }
-  .progresso-bar{
-    flex:1;
-    height:8px;
-    background:#0f3460;
-    border-radius:99px;
-    overflow:hidden;
-  }
-  .progresso-fill{
-    height:100%;
-    background:linear-gradient(90deg,#e94560,#ff7a90);
-    border-radius:99px;
-    transition:width .3s ease;
-  }
+  .progresso-wrap{display:flex;align-items:center;gap:10px;}
+  .progresso-bar{flex:1;height:8px;background:#0f3460;border-radius:99px;overflow:hidden;}
+  .progresso-fill{height:100%;background:linear-gradient(90deg,#e94560,#ff7a90);border-radius:99px;transition:width .3s ease;}
   .progresso-num{font-size:12px;color:#9498b3;white-space:nowrap;}
 
-  .voltar-topo{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    color:#9498b3;
-    font-size:13px;
-    cursor:pointer;
-    width:fit-content;
-  }
+  .voltar-topo{display:flex;align-items:center;gap:8px;color:#9498b3;font-size:13px;cursor:pointer;width:fit-content;}
 
   /* ===== CARTAO DE PERGUNTA ===== */
   .card-jogo{
-    background:#16213e;
-    border:1px solid #0f3460;
-    border-radius:18px;
-    padding:20px 18px;
-    display:flex;
-    flex-direction:column;
-    gap:14px;
+    background:#16213e;border:1px solid #0f3460;border-radius:18px;
+    padding:20px 18px;display:flex;flex-direction:column;gap:14px;
   }
-  .card-jogo .contexto{
-    font-size:12px;
-    text-transform:uppercase;
-    letter-spacing:.06em;
-    color:#e94560;
-    font-weight:600;
-  }
-  .produto-visual{
-    display:flex;
-    align-items:center;
-    gap:14px;
-    background:#1a1a40;
-    border:1px solid #0f3460;
-    border-radius:14px;
-    padding:14px;
-  }
+  .card-jogo .contexto{font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:#e94560;font-weight:600;}
+  .produto-visual{display:flex;align-items:center;gap:14px;background:#1a1a40;border:1px solid #0f3460;border-radius:14px;padding:14px;}
   .produto-visual .emoji{font-size:40px;}
   .produto-visual .info h4{font-size:16px;color:#fff;font-family:'Baloo 2',sans-serif;}
   .produto-visual .info p{font-size:13px;color:#9498b3;margin-top:2px;}
   .produto-visual .info .destaque{color:#ffd166;font-weight:700;}
 
   .duas-colunas{display:flex;gap:10px;}
-  .mini-info{
-    flex:1;
-    background:#1a1a40;
-    border:1px solid #0f3460;
-    border-radius:12px;
-    padding:10px 12px;
-    text-align:center;
-  }
+  .mini-info{flex:1;background:#1a1a40;border:1px solid #0f3460;border-radius:12px;padding:10px 12px;text-align:center;}
   .mini-info span{display:block;font-size:11px;color:#9498b3;margin-bottom:3px;}
   .mini-info strong{font-size:15px;color:#fff;}
 
   .pergunta-txt{font-size:15px;color:#e4e6f0;line-height:1.4;}
 
   .opcoes{display:flex;flex-direction:column;gap:10px;}
-  .opcao{
-    background:#1a1a40;
-    border:1.5px solid #0f3460;
-    border-radius:12px;
-    padding:13px 14px;
-    font-size:14px;
-    color:#e4e6f0;
-    text-align:left;
-    cursor:pointer;
-  }
+  .opcao{background:#1a1a40;border:1.5px solid #0f3460;border-radius:12px;padding:13px 14px;font-size:14px;color:#e4e6f0;text-align:left;cursor:pointer;}
   .opcao:active{transform:scale(.98);}
   .opcao.certa{background:#153d2b;border-color:#2d9d63;color:#8ef0b5;}
   .opcao.errada{background:#3d1520;border-color:#c0435c;color:#ff9fb2;}
@@ -236,56 +216,24 @@
   .duas-op{display:flex;gap:10px;}
   .duas-op .opcao{flex:1;text-align:center;font-weight:700;}
 
-  /* feedback */
-  .feedback{
-    border-radius:14px;
-    padding:14px;
-    font-size:13.5px;
-    line-height:1.45;
-    display:none;
-  }
+  .feedback{border-radius:14px;padding:14px;font-size:13.5px;line-height:1.45;display:none;}
   .feedback.mostrar{display:block;animation:fadeIn .2s ease;}
   .feedback.ok{background:#153d2b;border:1px solid #2d9d63;color:#c8f5da;}
   .feedback.mal{background:#3d1520;border:1px solid #c0435c;color:#ffd0da;}
   .feedback b{display:block;margin-bottom:4px;font-family:'Baloo 2',sans-serif;font-size:14.5px;}
 
   /* ===== RESULTADO ===== */
-  .resultado{
-    text-align:center;
-    padding:20px 8px;
-  }
+  .resultado{text-align:center;padding:20px 8px;}
   .resultado .medalha{font-size:64px;}
   .resultado h2{font-family:'Baloo 2',sans-serif;font-size:22px;color:#fff;margin-top:6px;}
   .resultado p{color:#9498b3;font-size:14px;margin-top:6px;}
-  .placar-grande{
-    font-family:'Baloo 2',sans-serif;
-    font-size:44px;
-    color:#ffd166;
-    margin:14px 0 4px;
-  }
-  .dicas-final{
-    background:#16213e;
-    border:1px solid #0f3460;
-    border-radius:14px;
-    padding:14px 16px;
-    text-align:left;
-    font-size:13.5px;
-    color:#cfd2e6;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-  }
+  .placar-grande{font-family:'Baloo 2',sans-serif;font-size:44px;color:#ffd166;margin:14px 0 4px;}
+  .dicas-final{background:#16213e;border:1px solid #0f3460;border-radius:14px;padding:14px 16px;text-align:left;font-size:13.5px;color:#cfd2e6;display:flex;flex-direction:column;gap:8px;}
   .dicas-final li{margin-left:16px;}
 
   footer.barra-fixa{
-    position:fixed;
-    bottom:0;left:0;right:0;
-    max-width:480px;
-    margin:0 auto;
-    background:#16213e;
-    border-top:1px solid #0f3460;
-    padding:12px 16px;
-    display:none;
+    position:fixed;bottom:0;left:0;right:0;max-width:480px;margin:0 auto;
+    background:#16213e;border-top:1px solid #0f3460;padding:12px 16px;display:none;
   }
   footer.barra-fixa.mostrar{display:block;}
 </style>
@@ -300,55 +248,42 @@
 
   <main>
 
-    <!-- ===================== TELA INICIAL ===================== -->
-    <section class="screen ativa" id="tela-home">
-      <div class="hero">
-        <h1>Aprenda a trabalhar<br>no <span>supermercado</span> jogando</h1>
-        <p>Três desafios rápidos sobre o dia a dia da loja. Vale ponto, vale treino de verdade.</p>
+    <!-- ===================== TELA DO MAPA (INICIAL) ===================== -->
+    <section class="screen ativa" id="tela-mapa">
+      <div class="mapa-intro">
+        <h1>Ande pelo mercado 🕹️</h1>
+        <p>Use o joystick para caminhar até um ponto de trabalho e toque em "Interagir".</p>
       </div>
 
-      <div class="fases">
-        <button class="fase-card fase-1" onclick="iniciarFase(1)">
-          <div class="icone">📅</div>
-          <div class="txt">
-            <h3>Confira a Validade</h3>
-            <p>Descubra o que pode ficar na prateleira</p>
-          </div>
-          <div class="seta">›</div>
-        </button>
-
-        <button class="fase-card fase-2" onclick="iniciarFase(2)">
-          <div class="icone">🏷️</div>
-          <div class="txt">
-            <h3>Confira o Preço</h3>
-            <p>Etiqueta bateu com o sistema?</p>
-          </div>
-          <div class="seta">›</div>
-        </button>
-
-        <button class="fase-card fase-3" onclick="iniciarFase(3)">
-          <div class="icone">🙋</div>
-          <div class="txt">
-            <h3>Atendimento ao Cliente</h3>
-            <p>Escolha a melhor resposta</p>
-          </div>
-          <div class="seta">›</div>
-        </button>
+      <div class="selos-estacoes" id="selosEstacoes">
+        <div class="selo" data-id="1">📅</div>
+        <div class="selo" data-id="2">🏷️</div>
+        <div class="selo" data-id="3">🙋</div>
       </div>
+
+      <div class="mapa-wrap" id="mapaWrap">
+        <canvas id="canvasMapa"></canvas>
+        <button class="btn-interagir" id="btnInteragir" onclick="comecarInteracao()">👆 Interagir</button>
+        <div class="joystick-base" id="joyBase">
+          <div class="joystick-thumb" id="joyThumb"></div>
+        </div>
+      </div>
+
+      <p class="dica-mapa">No computador dá pra usar as setas do teclado também.</p>
+
+      <div class="msg-completo" id="msgCompleto">🎉 Você já visitou os três pontos de trabalho! Pode repetir quantas vezes quiser para fixar o conteúdo.</div>
     </section>
 
-    <!-- ===================== TELA DE JOGO (fases 1,2,3) ===================== -->
+    <!-- ===================== TELA DE JOGO (perguntas) ===================== -->
     <section class="screen" id="tela-jogo">
-      <div class="voltar-topo" onclick="voltarHome()">‹ voltar ao início</div>
+      <div class="voltar-topo" onclick="voltarAoMapa()">‹ voltar ao mercado</div>
 
       <div class="progresso-wrap">
         <div class="progresso-bar"><div class="progresso-fill" id="progressoFill"></div></div>
         <div class="progresso-num" id="progressoNum">1/8</div>
       </div>
 
-      <div class="card-jogo" id="cardJogo">
-        <!-- preenchido via JS -->
-      </div>
+      <div class="card-jogo" id="cardJogo"></div>
 
       <div class="feedback" id="feedbackBox"></div>
     </section>
@@ -368,7 +303,7 @@
       </div>
 
       <button class="btn btn-primario" onclick="repetirFase()">Jogar esta fase de novo</button>
-      <button class="btn btn-fantasma" onclick="voltarHome()">Voltar ao menu</button>
+      <button class="btn btn-fantasma" onclick="voltarAoMapa()">Voltar ao mercado</button>
     </section>
 
   </main>
@@ -381,11 +316,9 @@
 
 <script>
 /* =========================================================
-   DADOS DO JOGO
+   DADOS DO JOGO (perguntas de cada fase)
    ========================================================= */
 
-// ---------- FASE 1: VALIDADE ----------
-// "hoje" fixado dentro do jogo, só para ensinar a lógica
 const HOJE_JOGO = "10/09/2026";
 
 const bancoValidade = [
@@ -399,7 +332,6 @@ const bancoValidade = [
   {emoji:"🍦", nome:"Sorvete de Massa", venc:"01/09/2026", vencido:true, dica:"Venceu há mais de uma semana. Retirar e registrar a perda conforme o procedimento da loja."},
 ];
 
-// ---------- FASE 2: CONFERÊNCIA DE PREÇO ----------
 const bancoPreco = [
   {emoji:"🧴", nome:"Sabonete Líquido", etiqueta:"7,49", sistema:"7,49", correto:true,
     dica:"Etiqueta e sistema batendo: tudo certo, só seguir o fluxo normal."},
@@ -419,66 +351,53 @@ const bancoPreco = [
     dica:"Cliente paga o preço da etiqueta (o menor). Depois, chame o responsável para corrigir a etiqueta ou o sistema."},
 ];
 
-// ---------- FASE 3: ATENDIMENTO ----------
 const bancoAtendimento = [
-  {
-    situacao:"Um cliente pergunta onde fica o açúcar, mas você está no meio de uma tarefa.",
+  {situacao:"Um cliente pergunta onde fica o açúcar, mas você está no meio de uma tarefa.",
     opcoes:[
       {t:"Aponta na direção e continua a tarefa.", nivel:0},
       {t:"Explica o corredor certo com um sorriso, sem se deslocar.", nivel:1},
       {t:"Para o que está fazendo e acompanha o cliente até o produto.", nivel:2},
     ],
-    dica:"Sempre que possível, acompanhe o cliente até o produto. Isso melhora muito a experiência de compra."
-  },
-  {
-    situacao:"No caixa, o cliente reclama que o preço cobrado é maior do que o da etiqueta na prateleira.",
+    dica:"Sempre que possível, acompanhe o cliente até o produto. Isso melhora muito a experiência de compra."},
+  {situacao:"No caixa, o cliente reclama que o preço cobrado é maior do que o da etiqueta na prateleira.",
     opcoes:[
       {t:"Diz que o sistema está sempre certo e cobra o valor cheio.", nivel:0},
       {t:"Pede desculpas, respeita o preço da etiqueta e chama o supervisor para corrigir depois.", nivel:2},
       {t:"Ignora e manda o cliente falar com o gerente.", nivel:0},
     ],
-    dica:"Por lei, prevalece o menor preço entre etiqueta e sistema. Resolva na hora e avise para corrigir a etiqueta ou o cadastro."
-  },
-  {
-    situacao:"A fila do caixa está grande e um cliente começa a ficar impaciente.",
+    dica:"Por lei, prevalece o menor preço entre etiqueta e sistema. Resolva na hora e avise para corrigir a etiqueta ou o cadastro."},
+  {situacao:"A fila do caixa está grande e um cliente começa a ficar impaciente.",
     opcoes:[
       {t:"Continua no seu ritmo normal, sem falar nada.", nivel:0},
       {t:"Pede desculpas pela espera e chama outro operador para abrir um caixa, se possível.", nivel:2},
       {t:"Discute com o cliente dizendo que não pode fazer nada.", nivel:0},
     ],
-    dica:"Reconhecer a espera e agir (chamar reforço) já reduz muito a insatisfação do cliente."
-  },
-  {
-    situacao:"Um cliente encontra um produto vencido na prateleira e mostra para você.",
+    dica:"Reconhecer a espera e agir (chamar reforço) já reduz muito a insatisfação do cliente."},
+  {situacao:"Um cliente encontra um produto vencido na prateleira e mostra para você.",
     opcoes:[
       {t:"Agradece o aviso, recolhe o produto e registra a ocorrência.", nivel:2},
       {t:"Diz que não é sua função e segue em frente.", nivel:0},
       {t:"Pega o produto e devolve na prateleira sem falar nada.", nivel:0},
     ],
-    dica:"Agradecer e agir na hora mostra cuidado com o cliente e evita risco à saúde de outras pessoas."
-  },
-  {
-    situacao:"Um cliente quer trocar um produto, mas esqueceu a nota fiscal em casa.",
+    dica:"Agradecer e agir na hora mostra cuidado com o cliente e evita risco à saúde de outras pessoas."},
+  {situacao:"Um cliente quer trocar um produto, mas esqueceu a nota fiscal em casa.",
     opcoes:[
       {t:"Recusa a troca na hora, sem explicar nada.", nivel:0},
       {t:"Explica com calma a política de trocas da loja e as alternativas possíveis.", nivel:2},
       {t:"Faz a troca sem verificar nada, para não discutir.", nivel:0},
     ],
-    dica:"Explicar a política com calma evita mal-entendidos e mantém a confiança do cliente na loja."
-  },
-  {
-    situacao:"Você percebe que um cliente idoso está com dificuldade para alcançar um produto na prateleira alta.",
+    dica:"Explicar a política com calma evita mal-entendidos e mantém a confiança do cliente na loja."},
+  {situacao:"Você percebe que um cliente idoso está com dificuldade para alcançar um produto na prateleira alta.",
     opcoes:[
       {t:"Espera ele pedir ajuda antes de agir.", nivel:0},
       {t:"Se oferece para ajudar antes mesmo de ser solicitado.", nivel:2},
       {t:"Finge que não viu e continua a tarefa.", nivel:0},
     ],
-    dica:"Antecipar a necessidade do cliente é um dos diferenciais de um bom atendimento."
-  },
+    dica:"Antecipar a necessidade do cliente é um dos diferenciais de um bom atendimento."},
 ];
 
 /* =========================================================
-   ESTADO DO JOGO
+   ESTADO GERAL DO JOGO
    ========================================================= */
 let pontosTotais = 0;
 let faseAtual = 0;
@@ -511,23 +430,299 @@ function mostrarTela(id){
   document.getElementById(id).classList.add('ativa');
 }
 
-function voltarHome(){
-  mostrarTela('tela-home');
+/* =========================================================
+   MAPA — bonequinho andando pelo mercado
+   ========================================================= */
+const MAPA_W = 340, MAPA_H = 460, BORDA = 14;
+
+const canvas = document.getElementById('canvasMapa');
+const ctx = canvas.getContext('2d');
+const DPR = Math.min(window.devicePixelRatio || 1, 2);
+canvas.width = MAPA_W * DPR;
+canvas.height = MAPA_H * DPR;
+canvas.style.aspectRatio = MAPA_W + ' / ' + MAPA_H;
+ctx.scale(DPR, DPR);
+
+// pontos de trabalho (estações) — retângulo do móvel + raio de interação
+const estacoes = [
+  {id:1, nome:"Confira a Validade", emoji:"📅", label:"VALIDADE", x:22, y:26, w:104, h:64, cor:"#1f3a5f", concluida:false},
+  {id:2, nome:"Atendimento ao Cliente", emoji:"🙋", label:"ATENDIMENTO", x:214, y:26, w:104, h:64, cor:"#2b2f5f", concluida:false},
+  {id:3, nome:"Confira o Preço", emoji:"🏷️", label:"CAIXA", x:120, y:378, w:100, h:62, cor:"#5f2b3a", concluida:false},
+];
+estacoes.forEach(e => e.raio = Math.max(e.w, e.h) / 2 + 42);
+
+// prateleiras decorativas (só obstáculo, sem função)
+const decoracoes = [
+  {x:64, y:132, w:24, h:190, cor:"#3a2f22"},
+  {x:252, y:132, w:24, h:190, cor:"#3a2f22"},
+];
+
+const obstaculosSolidos = [...estacoes, ...decoracoes];
+
+const player = {
+  x: MAPA_W/2, y: MAPA_H/2 + 10,
+  raio: 10,
+  facingRight: true,
+  moving: false,
+  animTime: 0,
+};
+
+let estacaoProxima = null;
+let mapaAtivo = true;
+
+/* ---------- entrada: joystick (toque/mouse) ---------- */
+const joyBase = document.getElementById('joyBase');
+const joyThumb = document.getElementById('joyThumb');
+const RAIO_JOY = 32;
+let joyDX = 0, joyDY = 0;
+
+function joyPos(clientX, clientY){
+  const rect = joyBase.getBoundingClientRect();
+  const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
+  let dx = clientX - cx, dy = clientY - cy;
+  const dist = Math.hypot(dx, dy);
+  if(dist > RAIO_JOY){ dx = dx/dist*RAIO_JOY; dy = dy/dist*RAIO_JOY; }
+  joyThumb.style.transform = `translate(${dx}px, ${dy}px)`;
+  joyDX = dx / RAIO_JOY;
+  joyDY = dy / RAIO_JOY;
+}
+function joyReset(){
+  joyDX = 0; joyDY = 0;
+  joyThumb.style.transform = 'translate(0,0)';
+}
+joyBase.addEventListener('pointerdown', e => {
+  joyBase.setPointerCapture(e.pointerId);
+  joyPos(e.clientX, e.clientY);
+});
+joyBase.addEventListener('pointermove', e => {
+  if(e.buttons === 0 && e.pointerType === 'mouse') return;
+  joyPos(e.clientX, e.clientY);
+});
+joyBase.addEventListener('pointerup', joyReset);
+joyBase.addEventListener('pointercancel', joyReset);
+
+/* ---------- entrada: teclado (para testar no PC) ---------- */
+const teclas = {};
+window.addEventListener('keydown', e => { teclas[e.key.toLowerCase()] = true; });
+window.addEventListener('keyup', e => { teclas[e.key.toLowerCase()] = false; });
+
+function vetorEntrada(){
+  if(Math.abs(joyDX) > 0.06 || Math.abs(joyDY) > 0.06){
+    return {dx: joyDX, dy: joyDY};
+  }
+  let dx = 0, dy = 0;
+  if(teclas['arrowleft'] || teclas['a']) dx -= 1;
+  if(teclas['arrowright'] || teclas['d']) dx += 1;
+  if(teclas['arrowup'] || teclas['w']) dy -= 1;
+  if(teclas['arrowdown'] || teclas['s']) dy += 1;
+  const mag = Math.hypot(dx, dy);
+  if(mag > 0){ dx /= mag; dy /= mag; }
+  return {dx, dy};
+}
+
+/* ---------- colisão simples círculo x retângulo ---------- */
+function colide(px, py){
+  for(const o of obstaculosSolidos){
+    const cx = Math.max(o.x, Math.min(px, o.x + o.w));
+    const cy = Math.max(o.y, Math.min(py, o.y + o.h));
+    if(Math.hypot(px - cx, py - cy) < player.raio) return true;
+  }
+  return false;
+}
+
+/* ---------- loop principal ---------- */
+const VELOCIDADE = 150;
+let ultimoTs = 0;
+
+function atualizar(dt){
+  const {dx, dy} = vetorEntrada();
+  player.moving = dx !== 0 || dy !== 0;
+  if(dx !== 0) player.facingRight = dx > 0;
+
+  let novoX = player.x + dx * VELOCIDADE * dt;
+  novoX = Math.max(BORDA + player.raio, Math.min(MAPA_W - BORDA - player.raio, novoX));
+  if(!colide(novoX, player.y)) player.x = novoX;
+
+  let novoY = player.y + dy * VELOCIDADE * dt;
+  novoY = Math.max(BORDA + player.raio, Math.min(MAPA_H - BORDA - player.raio, novoY));
+  if(!colide(player.x, novoY)) player.y = novoY;
+
+  player.animTime = player.moving ? player.animTime + dt : 0;
+
+  let masProxima = null, menorDist = Infinity;
+  for(const e of estacoes){
+    const cx = e.x + e.w/2, cy = e.y + e.h/2;
+    const d = Math.hypot(player.x - cx, player.y - cy);
+    if(d < e.raio && d < menorDist){ menorDist = d; masProxima = e; }
+  }
+  estacaoProxima = masProxima;
+  atualizarBotaoInteragir();
+}
+
+function roundRect(x, y, w, h, r){
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.arcTo(x+w, y, x+w, y+h, r);
+  ctx.arcTo(x+w, y+h, x, y+h, r);
+  ctx.arcTo(x, y+h, x, y, r);
+  ctx.arcTo(x, y, x+w, y, r);
+  ctx.closePath();
+}
+
+function desenharChao(){
+  ctx.fillStyle = '#0f3460';
+  ctx.fillRect(0, 0, MAPA_W, MAPA_H);
+  const tile = 28;
+  for(let yy = BORDA; yy < MAPA_H - BORDA; yy += tile){
+    for(let xx = BORDA; xx < MAPA_W - BORDA; xx += tile){
+      const par = (Math.round(xx/tile) + Math.round(yy/tile)) % 2 === 0;
+      ctx.fillStyle = par ? '#232848' : '#1c2140';
+      ctx.fillRect(xx, yy, tile, tile);
+    }
+  }
+}
+
+function desenharDecoracoes(){
+  const paletaProdutos = ['#e94560', '#ffd166', '#52d68f', '#8aa4ff'];
+  for(const d of decoracoes){
+    ctx.fillStyle = d.cor;
+    roundRect(d.x, d.y, d.w, d.h, 6);
+    ctx.fill();
+    let i = 0;
+    for(let yy = d.y + 8; yy < d.y + d.h - 8; yy += 18){
+      ctx.fillStyle = paletaProdutos[i % paletaProdutos.length];
+      ctx.fillRect(d.x + 4, yy, d.w - 8, 10);
+      i++;
+    }
+  }
+}
+
+function desenharEstacoes(){
+  for(const e of estacoes){
+    ctx.fillStyle = e.cor;
+    roundRect(e.x, e.y, e.w, e.h, 12);
+    ctx.fill();
+    ctx.strokeStyle = (estacaoProxima === e) ? '#ffd166' : 'rgba(255,255,255,0.18)';
+    ctx.lineWidth = (estacaoProxima === e) ? 3 : 2;
+    ctx.stroke();
+
+    ctx.font = '30px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(e.emoji, e.x + e.w/2, e.y + e.h/2 + 4);
+
+    ctx.font = "700 9px 'Baloo 2', sans-serif";
+    ctx.fillStyle = '#c7cbe6';
+    ctx.fillText(e.label, e.x + e.w/2, e.y - 6);
+
+    if(e.concluida){
+      ctx.font = '16px sans-serif';
+      ctx.fillText('✅', e.x + e.w - 12, e.y + 10);
+    }
+  }
+}
+
+function desenharPlayer(){
+  const passo = player.moving ? Math.sin(player.animTime * 11) * 4 : 0;
+  ctx.save();
+  ctx.translate(player.x, player.y);
+  if(!player.facingRight) ctx.scale(-1, 1);
+
+  ctx.fillStyle = 'rgba(0,0,0,0.35)';
+  ctx.beginPath();
+  ctx.ellipse(0, 15, 12, 4, 0, 0, Math.PI*2);
+  ctx.fill();
+
+  ctx.fillStyle = '#2b2f52';
+  ctx.fillRect(-7, 3 + passo, 6, 12);
+  ctx.fillRect(1, 3 - passo, 6, 12);
+
+  ctx.fillStyle = '#2d9d63';
+  ctx.fillRect(-11, -9 - passo*0.6, 5, 12);
+  ctx.fillRect(6, -9 + passo*0.6, 5, 12);
+
+  ctx.fillStyle = '#2d9d63';
+  ctx.fillRect(-9, -13, 18, 16);
+  ctx.fillStyle = '#ffd166';
+  ctx.fillRect(-9, -5, 18, 3);
+
+  ctx.fillStyle = '#f2c299';
+  ctx.fillRect(-8, -27, 16, 14);
+
+  ctx.fillStyle = '#e94560';
+  ctx.fillRect(-9, -31, 18, 6);
+  ctx.fillRect(3, -27, 7, 4);
+
+  ctx.fillStyle = '#1a1a2e';
+  ctx.fillRect(3, -21, 2, 2);
+
+  ctx.restore();
+}
+
+function desenhar(){
+  ctx.clearRect(0, 0, MAPA_W, MAPA_H);
+  desenharChao();
+  desenharDecoracoes();
+  desenharEstacoes();
+  desenharPlayer();
+}
+
+function loop(ts){
+  if(!ultimoTs) ultimoTs = ts;
+  const dt = Math.min((ts - ultimoTs) / 1000, 0.05);
+  ultimoTs = ts;
+  if(mapaAtivo){
+    atualizar(dt);
+    desenhar();
+  }
+  requestAnimationFrame(loop);
+}
+requestAnimationFrame(loop);
+
+/* ---------- botão de interagir + selos ---------- */
+const elBtnInteragir = document.getElementById('btnInteragir');
+function atualizarBotaoInteragir(){
+  if(estacaoProxima){
+    elBtnInteragir.textContent = '👆 ' + estacaoProxima.nome;
+    elBtnInteragir.classList.add('mostrar');
+  } else {
+    elBtnInteragir.classList.remove('mostrar');
+  }
+}
+
+function atualizarSelos(){
+  estacoes.forEach(e => {
+    const el = document.querySelector(`.selo[data-id="${e.id}"]`);
+    if(el) el.classList.toggle('feita', e.concluida);
+  });
+  document.getElementById('msgCompleto').classList.toggle('mostrar', estacoes.every(e => e.concluida));
+}
+
+function comecarInteracao(){
+  if(!estacaoProxima) return;
+  iniciarFase(estacaoProxima.id);
+}
+
+function voltarAoMapa(){
+  mostrarTela('tela-mapa');
   elBarraFixa.classList.remove('mostrar');
+  mapaAtivo = true;
+  joyReset();
 }
 
 /* =========================================================
-   INICIAR FASE
+   INICIAR FASE (perguntas de uma estação)
    ========================================================= */
 function iniciarFase(numero){
+  mapaAtivo = false;
   faseAtual = numero;
   indiceAtual = 0;
   pontosFase = 0;
   dicasColetadas = [];
 
   if(numero === 1) perguntas = embaralhar(bancoValidade);
-  if(numero === 2) perguntas = embaralhar(bancoPreco);
-  if(numero === 3) perguntas = embaralhar(bancoAtendimento);
+  if(numero === 2) perguntas = embaralhar(bancoAtendimento);
+  if(numero === 3) perguntas = embaralhar(bancoPreco);
 
   pontosMaxFase = perguntas.length * 10;
 
@@ -560,8 +755,8 @@ function renderPergunta(){
   const item = perguntas[indiceAtual];
 
   if(faseAtual === 1) renderValidade(item);
-  if(faseAtual === 2) renderPreco(item);
-  if(faseAtual === 3) renderAtendimento(item);
+  if(faseAtual === 3) renderPreco(item);
+  if(faseAtual === 2) renderAtendimento(item);
 }
 
 function renderValidade(item){
@@ -580,7 +775,7 @@ function renderValidade(item){
       <button class="opcao" data-ok="true" onclick="responder(this)">✅ Pode vender</button>
     </div>
   `;
-  window._respostaCerta = !item.vencido; // "pode vender" = true quando NÃO vencido
+  window._respostaCerta = !item.vencido;
   window._dicaAtual = item.dica;
 }
 
@@ -620,7 +815,7 @@ function renderAtendimento(item){
 }
 
 /* =========================================================
-   RESPONDER — fases 1 e 2 (certo/errado binário)
+   RESPOSTAS
    ========================================================= */
 function responder(botao){
   if(respondida) return;
@@ -639,9 +834,6 @@ function responder(botao){
   darFeedback(acertou, acertou ? 10 : 0);
 }
 
-/* =========================================================
-   RESPONDER — fase 3 (nível 0/1/2 de qualidade da resposta)
-   ========================================================= */
 function responderAtendimento(botao){
   if(respondida) return;
   respondida = true;
@@ -659,7 +851,7 @@ function responderAtendimento(botao){
   darFeedback(nivel === 2, pontosGanhos, nivel);
 }
 
-function darFeedback(acertouTotal, pontosGanhos, nivelAtendimento){
+function darFeedback(acertouTotal, pontosGanhos){
   pontosFase += pontosGanhos;
   pontosTotais += pontosGanhos;
   elPontosHeader.textContent = pontosTotais;
@@ -698,6 +890,10 @@ function proximaPergunta(){
 function mostrarResultado(){
   elBarraFixa.classList.remove('mostrar');
   mostrarTela('tela-resultado');
+
+  const estacao = estacoes.find(e => e.id === faseAtual);
+  if(estacao) estacao.concluida = true;
+  atualizarSelos();
 
   document.getElementById('pontosFase').textContent = pontosFase;
   document.getElementById('pontosFaseMax').textContent = pontosMaxFase;
