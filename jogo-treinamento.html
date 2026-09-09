@@ -72,114 +72,90 @@
   .screen.ativa{display:flex;}
   @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
 
-  /* ===== TELA DO MAPA ===== */
-  .mapa-intro{text-align:center;padding:2px 4px;}
-  .mapa-intro h1{font-family:'Baloo 2',sans-serif;font-size:19px;color:#fff;}
-  .mapa-intro p{font-size:12.5px;color:#9498b3;margin-top:4px;}
-
-  .selos-estacoes{display:flex;justify-content:center;gap:10px;}
-  .selo{
-    width:38px;height:38px;border-radius:11px;
-    background:#16213e;border:1.5px solid #0f3460;
-    display:flex;align-items:center;justify-content:center;
-    font-size:18px;opacity:.45;transition:all .2s ease;
+  /* ===== TELA DO CORREDOR (visão em primeira pessoa) ===== */
+  .cena-header{text-align:center;}
+  .cena-header span{
+    font-family:'Baloo 2',sans-serif;
+    font-size:15px;
+    color:#fff;
+    background:#16213e;
+    border:1px solid #0f3460;
+    padding:6px 16px;
+    border-radius:999px;
   }
-  .selo.feita{opacity:1;border-color:#2d9d63;background:#153d2b;box-shadow:0 0 0 2px #2d9d6333;}
 
-  .mapa-wrap{
+  .cena-wrap{
     position:relative;
     width:100%;
     border-radius:18px;
     overflow:hidden;
     border:1px solid #0f3460;
-    touch-action:none;
-    user-select:none;
   }
-  .mapa-wrap canvas{
-    display:block;
-    width:100%;
-    height:auto;
+  .cena-wrap canvas{display:block;width:100%;height:auto;}
+
+  .overlay-transicao{
+    position:absolute;inset:0;background:#000;opacity:0;
+    transition:opacity .15s linear;pointer-events:none;
   }
 
-  .btn-interagir{
+  .btn-examinar{
     position:absolute;
-    left:50%;
-    top:14px;
+    left:50%;bottom:16px;
     transform:translateX(-50%);
-    background:#e94560;
-    color:#fff;
-    border:none;
-    padding:9px 18px;
-    border-radius:999px;
-    font-family:'Baloo 2',sans-serif;
-    font-weight:700;
-    font-size:13.5px;
-    display:none;
-    align-items:center;
-    gap:6px;
+    background:#e94560;color:#fff;border:none;
+    padding:10px 18px;border-radius:999px;
+    font-family:'Baloo 2',sans-serif;font-weight:700;font-size:13.5px;
+    display:none;align-items:center;gap:6px;
     box-shadow:0 4px 14px #00000055;
     animation:pulso 1s infinite alternate;
     z-index:3;
   }
-  .btn-interagir.mostrar{display:flex;}
+  .btn-examinar.mostrar{display:flex;}
   @keyframes pulso{from{transform:translateX(-50%) scale(1);}to{transform:translateX(-50%) scale(1.05);}}
 
-  .joystick-base{
-    position:absolute;
-    left:18px;
-    bottom:18px;
-    width:88px;height:88px;
-    border-radius:50%;
-    background:rgba(255,255,255,.07);
-    border:2px solid rgba(255,255,255,.22);
-    touch-action:none;
-    z-index:3;
+  .trilha{display:flex;justify-content:center;align-items:center;gap:7px;flex-wrap:wrap;}
+  .trilha .ponto{
+    width:12px;height:12px;border-radius:50%;
+    background:#0f3460;border:1.5px solid #2a2f52;
+    transition:all .15s ease;
   }
-  .joystick-thumb{
-    position:absolute;
-    left:24px;top:24px;
-    width:40px;height:40px;
-    border-radius:50%;
-    background:rgba(233,69,96,.85);
-    pointer-events:none;
+  .trilha .ponto.estacao{
+    width:28px;height:28px;font-size:14px;
+    display:flex;align-items:center;justify-content:center;
+    background:#16213e;
   }
+  .trilha .ponto.atual{border-color:#ffd166;box-shadow:0 0 0 3px rgba(255,209,102,0.28);}
+  .trilha .ponto.feita{background:#153d2b;border-color:#2d9d63;}
 
-  .dica-mapa{
-    font-size:11.5px;
-    color:#6d7191;
-    text-align:center;
+  .controles-andar{display:flex;gap:10px;}
+  .btn-andar{
+    flex:1;padding:14px;border-radius:14px;
+    background:#16213e;border:1px solid #0f3460;color:#e4e6f0;
+    font-family:'Baloo 2',sans-serif;font-weight:700;font-size:14px;
+    cursor:pointer;
   }
+  .btn-andar:active{background:#0f3460;}
+  .btn-andar:disabled{opacity:.3;pointer-events:none;}
+
+  .dica-mapa{font-size:11.5px;color:#6d7191;text-align:center;}
 
   .msg-completo{
-    display:none;
-    background:#153d2b;
-    border:1px solid #2d9d63;
-    border-radius:14px;
-    padding:12px 14px;
-    text-align:center;
-    font-size:13.5px;
-    color:#c8f5da;
+    display:none;background:#153d2b;border:1px solid #2d9d63;border-radius:14px;
+    padding:12px 14px;text-align:center;font-size:13.5px;color:#c8f5da;
   }
   .msg-completo.mostrar{display:block;}
 
   /* ===== BOTOES GERAIS ===== */
   .btn{
-    display:block;
-    width:100%;
-    padding:14px;
-    border:none;
-    border-radius:14px;
-    font-family:'Baloo 2', sans-serif;
-    font-weight:700;
-    font-size:15px;
-    cursor:pointer;
-    text-align:center;
+    display:block;width:100%;padding:14px;border:none;border-radius:14px;
+    font-family:'Baloo 2', sans-serif;font-weight:700;font-size:15px;
+    cursor:pointer;text-align:center;
   }
   .btn-primario{background:#e94560;color:#fff;}
   .btn-primario:active{background:#d63852;}
   .btn-fantasma{background:transparent;color:#9498b3;border:1px solid #2a2f52;}
 
-  /* ===== BARRA DE PROGRESSO DE FASE ===== */
+  /* ===== BARRA DE PROGRESSO DE FASE (quiz) ===== */
   .progresso-wrap{display:flex;align-items:center;gap:10px;}
   .progresso-bar{flex:1;height:8px;background:#0f3460;border-radius:99px;overflow:hidden;}
   .progresso-fill{height:100%;background:linear-gradient(90deg,#e94560,#ff7a90);border-radius:99px;transition:width .3s ease;}
@@ -248,35 +224,31 @@
 
   <main>
 
-    <!-- ===================== TELA DO MAPA (INICIAL) ===================== -->
+    <!-- ===================== TELA DO CORREDOR (visão 1ª pessoa) ===================== -->
     <section class="screen ativa" id="tela-mapa">
-      <div class="mapa-intro">
-        <h1>Ande pelo mercado 🕹️</h1>
-        <p>Use o joystick para caminhar até um ponto de trabalho e toque em "Interagir".</p>
+      <div class="cena-header"><span id="nomeLocal">🚪 Entrada do Mercado</span></div>
+
+      <div class="cena-wrap" id="cenaWrap">
+        <canvas id="canvasCena"></canvas>
+        <div class="overlay-transicao" id="overlayTransicao"></div>
+        <button class="btn-examinar" id="btnExaminar" onclick="comecarInteracao()">👆 Examinar</button>
       </div>
 
-      <div class="selos-estacoes" id="selosEstacoes">
-        <div class="selo" data-id="1">📅</div>
-        <div class="selo" data-id="2">🏷️</div>
-        <div class="selo" data-id="3">🙋</div>
+      <div class="trilha" id="trilha"></div>
+
+      <div class="controles-andar">
+        <button class="btn-andar" id="btnAndarEsq" onclick="andar(-1)">◀ Andar</button>
+        <button class="btn-andar" id="btnAndarDir" onclick="andar(1)">Andar ▶</button>
       </div>
 
-      <div class="mapa-wrap" id="mapaWrap">
-        <canvas id="canvasMapa"></canvas>
-        <button class="btn-interagir" id="btnInteragir" onclick="comecarInteracao()">👆 Interagir</button>
-        <div class="joystick-base" id="joyBase">
-          <div class="joystick-thumb" id="joyThumb"></div>
-        </div>
-      </div>
-
-      <p class="dica-mapa">No computador dá pra usar as setas do teclado também.</p>
+      <p class="dica-mapa">Ande pelo corredor e, ao chegar num ponto de trabalho, toque em "Examinar".</p>
 
       <div class="msg-completo" id="msgCompleto">🎉 Você já visitou os três pontos de trabalho! Pode repetir quantas vezes quiser para fixar o conteúdo.</div>
     </section>
 
     <!-- ===================== TELA DE JOGO (perguntas) ===================== -->
     <section class="screen" id="tela-jogo">
-      <div class="voltar-topo" onclick="voltarAoMapa()">‹ voltar ao mercado</div>
+      <div class="voltar-topo" onclick="voltarAoMapa()">‹ voltar ao corredor</div>
 
       <div class="progresso-wrap">
         <div class="progresso-bar"><div class="progresso-fill" id="progressoFill"></div></div>
@@ -303,7 +275,7 @@
       </div>
 
       <button class="btn btn-primario" onclick="repetirFase()">Jogar esta fase de novo</button>
-      <button class="btn btn-fantasma" onclick="voltarAoMapa()">Voltar ao mercado</button>
+      <button class="btn btn-fantasma" onclick="voltarAoMapa()">Voltar ao corredor</button>
     </section>
 
   </main>
@@ -397,7 +369,29 @@ const bancoAtendimento = [
 ];
 
 /* =========================================================
-   ESTADO GERAL DO JOGO
+   ESTACOES (pontos de trabalho) e CORREDOR
+   ========================================================= */
+const estacoesInfo = {
+  1: {nome:"Confira a Validade", perguntas: bancoValidade, concluida:false},
+  2: {nome:"Atendimento ao Cliente", perguntas: bancoAtendimento, concluida:false},
+  3: {nome:"Confira o Preço", perguntas: bancoPreco, concluida:false},
+};
+
+// sequência do corredor, na ordem em que o funcionário caminha
+const corredor = [
+  {tipo:"vazio",   nome:"Entrada do Mercado",     emoji:"🚪"},
+  {tipo:"estacao", nome:"Câmara de Frios",        emoji:"🧊", estacaoId:1, produtos:["🥛","🧀","🍦","🥩"]},
+  {tipo:"vazio",   nome:"Corredor de Mercearia",  emoji:"🥫"},
+  {tipo:"estacao", nome:"Caixa Registradora",     emoji:"🏷️", estacaoId:3, produtos:["🥤","🍪","🧻","🍬"]},
+  {tipo:"vazio",   nome:"Corredor dos Fundos",    emoji:"📦"},
+  {tipo:"estacao", nome:"Balcão de Atendimento",  emoji:"🙋", estacaoId:2, produtos:["🙋","💬","🛍️","📋"]},
+  {tipo:"vazio",   nome:"Fim do Corredor",        emoji:"🏁"},
+];
+
+let posicaoAtual = 0;
+
+/* =========================================================
+   ESTADO GERAL DO QUIZ
    ========================================================= */
 let pontosTotais = 0;
 let faseAtual = 0;
@@ -431,133 +425,18 @@ function mostrarTela(id){
 }
 
 /* =========================================================
-   MAPA — bonequinho andando pelo mercado
+   CENA EM PRIMEIRA PESSOA (canvas)
    ========================================================= */
-const MAPA_W = 340, MAPA_H = 460, BORDA = 14;
+const CENA_W = 340, CENA_H = 380;
+const vpX = CENA_W/2, vpY = CENA_H*0.42;
 
-const canvas = document.getElementById('canvasMapa');
+const canvas = document.getElementById('canvasCena');
 const ctx = canvas.getContext('2d');
 const DPR = Math.min(window.devicePixelRatio || 1, 2);
-canvas.width = MAPA_W * DPR;
-canvas.height = MAPA_H * DPR;
-canvas.style.aspectRatio = MAPA_W + ' / ' + MAPA_H;
+canvas.width = CENA_W * DPR;
+canvas.height = CENA_H * DPR;
+canvas.style.aspectRatio = CENA_W + ' / ' + CENA_H;
 ctx.scale(DPR, DPR);
-
-// pontos de trabalho (estações) — retângulo do móvel + raio de interação
-const estacoes = [
-  {id:1, nome:"Confira a Validade", emoji:"📅", label:"VALIDADE", x:22, y:26, w:104, h:64, cor:"#1f3a5f", concluida:false},
-  {id:2, nome:"Atendimento ao Cliente", emoji:"🙋", label:"ATENDIMENTO", x:214, y:26, w:104, h:64, cor:"#2b2f5f", concluida:false},
-  {id:3, nome:"Confira o Preço", emoji:"🏷️", label:"CAIXA", x:120, y:378, w:100, h:62, cor:"#5f2b3a", concluida:false},
-];
-estacoes.forEach(e => e.raio = Math.max(e.w, e.h) / 2 + 42);
-
-// prateleiras decorativas (só obstáculo, sem função)
-const decoracoes = [
-  {x:64, y:132, w:24, h:190, cor:"#3a2f22"},
-  {x:252, y:132, w:24, h:190, cor:"#3a2f22"},
-];
-
-const obstaculosSolidos = [...estacoes, ...decoracoes];
-
-const player = {
-  x: MAPA_W/2, y: MAPA_H/2 + 10,
-  raio: 10,
-  facingRight: true,
-  moving: false,
-  animTime: 0,
-};
-
-let estacaoProxima = null;
-let mapaAtivo = true;
-
-/* ---------- entrada: joystick (toque/mouse) ---------- */
-const joyBase = document.getElementById('joyBase');
-const joyThumb = document.getElementById('joyThumb');
-const RAIO_JOY = 32;
-let joyDX = 0, joyDY = 0;
-
-function joyPos(clientX, clientY){
-  const rect = joyBase.getBoundingClientRect();
-  const cx = rect.left + rect.width/2, cy = rect.top + rect.height/2;
-  let dx = clientX - cx, dy = clientY - cy;
-  const dist = Math.hypot(dx, dy);
-  if(dist > RAIO_JOY){ dx = dx/dist*RAIO_JOY; dy = dy/dist*RAIO_JOY; }
-  joyThumb.style.transform = `translate(${dx}px, ${dy}px)`;
-  joyDX = dx / RAIO_JOY;
-  joyDY = dy / RAIO_JOY;
-}
-function joyReset(){
-  joyDX = 0; joyDY = 0;
-  joyThumb.style.transform = 'translate(0,0)';
-}
-joyBase.addEventListener('pointerdown', e => {
-  joyBase.setPointerCapture(e.pointerId);
-  joyPos(e.clientX, e.clientY);
-});
-joyBase.addEventListener('pointermove', e => {
-  if(e.buttons === 0 && e.pointerType === 'mouse') return;
-  joyPos(e.clientX, e.clientY);
-});
-joyBase.addEventListener('pointerup', joyReset);
-joyBase.addEventListener('pointercancel', joyReset);
-
-/* ---------- entrada: teclado (para testar no PC) ---------- */
-const teclas = {};
-window.addEventListener('keydown', e => { teclas[e.key.toLowerCase()] = true; });
-window.addEventListener('keyup', e => { teclas[e.key.toLowerCase()] = false; });
-
-function vetorEntrada(){
-  if(Math.abs(joyDX) > 0.06 || Math.abs(joyDY) > 0.06){
-    return {dx: joyDX, dy: joyDY};
-  }
-  let dx = 0, dy = 0;
-  if(teclas['arrowleft'] || teclas['a']) dx -= 1;
-  if(teclas['arrowright'] || teclas['d']) dx += 1;
-  if(teclas['arrowup'] || teclas['w']) dy -= 1;
-  if(teclas['arrowdown'] || teclas['s']) dy += 1;
-  const mag = Math.hypot(dx, dy);
-  if(mag > 0){ dx /= mag; dy /= mag; }
-  return {dx, dy};
-}
-
-/* ---------- colisão simples círculo x retângulo ---------- */
-function colide(px, py){
-  for(const o of obstaculosSolidos){
-    const cx = Math.max(o.x, Math.min(px, o.x + o.w));
-    const cy = Math.max(o.y, Math.min(py, o.y + o.h));
-    if(Math.hypot(px - cx, py - cy) < player.raio) return true;
-  }
-  return false;
-}
-
-/* ---------- loop principal ---------- */
-const VELOCIDADE = 150;
-let ultimoTs = 0;
-
-function atualizar(dt){
-  const {dx, dy} = vetorEntrada();
-  player.moving = dx !== 0 || dy !== 0;
-  if(dx !== 0) player.facingRight = dx > 0;
-
-  let novoX = player.x + dx * VELOCIDADE * dt;
-  novoX = Math.max(BORDA + player.raio, Math.min(MAPA_W - BORDA - player.raio, novoX));
-  if(!colide(novoX, player.y)) player.x = novoX;
-
-  let novoY = player.y + dy * VELOCIDADE * dt;
-  novoY = Math.max(BORDA + player.raio, Math.min(MAPA_H - BORDA - player.raio, novoY));
-  if(!colide(player.x, novoY)) player.y = novoY;
-
-  player.animTime = player.moving ? player.animTime + dt : 0;
-
-  let masProxima = null, menorDist = Infinity;
-  for(const e of estacoes){
-    const cx = e.x + e.w/2, cy = e.y + e.h/2;
-    const d = Math.hypot(player.x - cx, player.y - cy);
-    if(d < e.raio && d < menorDist){ menorDist = d; masProxima = e; }
-  }
-  estacaoProxima = masProxima;
-  atualizarBotaoInteragir();
-}
 
 function roundRect(x, y, w, h, r){
   ctx.beginPath();
@@ -569,161 +448,228 @@ function roundRect(x, y, w, h, r){
   ctx.closePath();
 }
 
-function desenharChao(){
-  ctx.fillStyle = '#0f3460';
-  ctx.fillRect(0, 0, MAPA_W, MAPA_H);
-  const tile = 28;
-  for(let yy = BORDA; yy < MAPA_H - BORDA; yy += tile){
-    for(let xx = BORDA; xx < MAPA_W - BORDA; xx += tile){
-      const par = (Math.round(xx/tile) + Math.round(yy/tile)) % 2 === 0;
-      ctx.fillStyle = par ? '#232848' : '#1c2140';
-      ctx.fillRect(xx, yy, tile, tile);
-    }
-  }
-}
+function desenharFundoCorredor(){
+  ctx.fillStyle = '#0c1024';
+  ctx.fillRect(0, 0, CENA_W, CENA_H);
 
-function desenharDecoracoes(){
-  const paletaProdutos = ['#e94560', '#ffd166', '#52d68f', '#8aa4ff'];
-  for(const d of decoracoes){
-    ctx.fillStyle = d.cor;
-    roundRect(d.x, d.y, d.w, d.h, 6);
-    ctx.fill();
-    let i = 0;
-    for(let yy = d.y + 8; yy < d.y + d.h - 8; yy += 18){
-      ctx.fillStyle = paletaProdutos[i % paletaProdutos.length];
-      ctx.fillRect(d.x + 4, yy, d.w - 8, 10);
-      i++;
-    }
-  }
-}
+  // teto
+  ctx.fillStyle = '#232848';
+  ctx.beginPath();
+  ctx.moveTo(0, 0); ctx.lineTo(CENA_W, 0);
+  ctx.lineTo(vpX + 46, vpY - 8); ctx.lineTo(vpX - 46, vpY - 8);
+  ctx.closePath(); ctx.fill();
 
-function desenharEstacoes(){
-  for(const e of estacoes){
-    ctx.fillStyle = e.cor;
-    roundRect(e.x, e.y, e.w, e.h, 12);
-    ctx.fill();
-    ctx.strokeStyle = (estacaoProxima === e) ? '#ffd166' : 'rgba(255,255,255,0.18)';
-    ctx.lineWidth = (estacaoProxima === e) ? 3 : 2;
+  // luminárias
+  ctx.fillStyle = 'rgba(255,255,255,0.12)';
+  for(let i = 0; i < 3; i++){
+    const larg = 90 - i*24, alt = 10 - i*2;
+    const yy = 18 + i*12;
+    ctx.fillRect(vpX - larg/2, yy, larg, alt);
+  }
+
+  // chão
+  ctx.fillStyle = '#1c2140';
+  ctx.beginPath();
+  ctx.moveTo(0, CENA_H); ctx.lineTo(CENA_W, CENA_H);
+  ctx.lineTo(vpX + 46, vpY + 8); ctx.lineTo(vpX - 46, vpY + 8);
+  ctx.closePath(); ctx.fill();
+
+  // linhas do piso (perspectiva)
+  ctx.strokeStyle = 'rgba(255,255,255,0.055)';
+  ctx.lineWidth = 1;
+  for(let i = -3; i <= 3; i++){
+    ctx.beginPath();
+    ctx.moveTo(CENA_W/2 + i*58, CENA_H);
+    ctx.lineTo(vpX + i*7, vpY + 8);
     ctx.stroke();
+  }
 
+  // continuação do corredor ao fundo
+  ctx.fillStyle = '#141830';
+  ctx.fillRect(vpX - 46, vpY - 8, 92, 16);
+}
+
+function desenharPrateleiraLateral(lado, cor){
+  const xBorda = lado === -1 ? 0 : CENA_W;
+  ctx.fillStyle = cor;
+  ctx.beginPath();
+  ctx.moveTo(xBorda, CENA_H*0.16);
+  ctx.lineTo(xBorda, CENA_H*0.86);
+  ctx.lineTo(vpX + lado*48, vpY + 6);
+  ctx.lineTo(vpX + lado*48, vpY - 6);
+  ctx.closePath();
+  ctx.fill();
+
+  // prateleiras (linhas) + produtinhos na parte mais próxima (maior)
+  const paleta = ['#e94560', '#ffd166', '#52d68f', '#8aa4ff'];
+  const xProd = lado === -1 ? 14 : CENA_W - 46;
+  for(let linha = 0; linha < 4; linha++){
+    const yy = CENA_H*0.24 + linha*30;
+    ctx.fillStyle = paleta[linha % paleta.length];
+    ctx.fillRect(xProd, yy, 32, 16);
+  }
+}
+
+function desenharBracos(){
+  ctx.fillStyle = '#2d9d63';
+  ctx.beginPath();
+  ctx.moveTo(-4, CENA_H); ctx.lineTo(-4, CENA_H-62); ctx.lineTo(66, CENA_H+4);
+  ctx.closePath(); ctx.fill();
+  ctx.beginPath();
+  ctx.moveTo(CENA_W+4, CENA_H); ctx.lineTo(CENA_W+4, CENA_H-62); ctx.lineTo(CENA_W-66, CENA_H+4);
+  ctx.closePath(); ctx.fill();
+}
+
+const CORES_ESTACAO = {1: '#1f3a5f', 2: '#2b2f5f', 3: '#5f2b3a'};
+
+function desenharObjetoEstacao(cena, destacado){
+  const largura = 230, altura = 190;
+  const x = CENA_W/2 - largura/2, y = CENA_H - altura - 26;
+
+  ctx.fillStyle = CORES_ESTACAO[cena.estacaoId] || '#2a2f52';
+  roundRect(x, y, largura, altura, 14);
+  ctx.fill();
+  ctx.strokeStyle = destacado ? '#ffd166' : 'rgba(255,255,255,0.2)';
+  ctx.lineWidth = destacado ? 4 : 2;
+  ctx.stroke();
+
+  // fileiras de produtos, como se estivesse de frente pra prateleira
+  for(let linha = 0; linha < 2; linha++){
+    const yy = y + 30 + linha*72;
+    ctx.strokeStyle = 'rgba(255,255,255,0.14)';
+    ctx.beginPath();
+    ctx.moveTo(x+12, yy+50); ctx.lineTo(x+largura-12, yy+50);
+    ctx.stroke();
     ctx.font = '30px sans-serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText(e.emoji, e.x + e.w/2, e.y + e.h/2 + 4);
-
-    ctx.font = "700 9px 'Baloo 2', sans-serif";
-    ctx.fillStyle = '#c7cbe6';
-    ctx.fillText(e.label, e.x + e.w/2, e.y - 6);
-
-    if(e.concluida){
-      ctx.font = '16px sans-serif';
-      ctx.fillText('✅', e.x + e.w - 12, e.y + 10);
+    for(let col = 0; col < 4; col++){
+      const emoji = cena.produtos[(linha*4 + col) % cena.produtos.length];
+      ctx.fillText(emoji, x + 34 + col*54, yy + 16);
     }
   }
-}
 
-function desenharPlayer(){
-  const passo = player.moving ? Math.sin(player.animTime * 11) * 4 : 0;
-  ctx.save();
-  ctx.translate(player.x, player.y);
-  if(!player.facingRight) ctx.scale(-1, 1);
+  // rótulo e ícone principal
+  ctx.font = '34px sans-serif';
+  ctx.textAlign = 'center';
+  ctx.fillText(cena.emoji, CENA_W/2, y - 18);
 
-  ctx.fillStyle = 'rgba(0,0,0,0.35)';
-  ctx.beginPath();
-  ctx.ellipse(0, 15, 12, 4, 0, 0, Math.PI*2);
-  ctx.fill();
+  ctx.font = "700 12px 'Baloo 2', sans-serif";
+  ctx.fillStyle = '#e4e6f0';
+  ctx.fillText(cena.nome, CENA_W/2, y - 40);
 
-  ctx.fillStyle = '#2b2f52';
-  ctx.fillRect(-7, 3 + passo, 6, 12);
-  ctx.fillRect(1, 3 - passo, 6, 12);
-
-  ctx.fillStyle = '#2d9d63';
-  ctx.fillRect(-11, -9 - passo*0.6, 5, 12);
-  ctx.fillRect(6, -9 + passo*0.6, 5, 12);
-
-  ctx.fillStyle = '#2d9d63';
-  ctx.fillRect(-9, -13, 18, 16);
-  ctx.fillStyle = '#ffd166';
-  ctx.fillRect(-9, -5, 18, 3);
-
-  ctx.fillStyle = '#f2c299';
-  ctx.fillRect(-8, -27, 16, 14);
-
-  ctx.fillStyle = '#e94560';
-  ctx.fillRect(-9, -31, 18, 6);
-  ctx.fillRect(3, -27, 7, 4);
-
-  ctx.fillStyle = '#1a1a2e';
-  ctx.fillRect(3, -21, 2, 2);
-
-  ctx.restore();
-}
-
-function desenhar(){
-  ctx.clearRect(0, 0, MAPA_W, MAPA_H);
-  desenharChao();
-  desenharDecoracoes();
-  desenharEstacoes();
-  desenharPlayer();
-}
-
-function loop(ts){
-  if(!ultimoTs) ultimoTs = ts;
-  const dt = Math.min((ts - ultimoTs) / 1000, 0.05);
-  ultimoTs = ts;
-  if(mapaAtivo){
-    atualizar(dt);
-    desenhar();
-  }
-  requestAnimationFrame(loop);
-}
-requestAnimationFrame(loop);
-
-/* ---------- botão de interagir + selos ---------- */
-const elBtnInteragir = document.getElementById('btnInteragir');
-function atualizarBotaoInteragir(){
-  if(estacaoProxima){
-    elBtnInteragir.textContent = '👆 ' + estacaoProxima.nome;
-    elBtnInteragir.classList.add('mostrar');
-  } else {
-    elBtnInteragir.classList.remove('mostrar');
+  if(estacoesInfo[cena.estacaoId].concluida){
+    ctx.font = '22px sans-serif';
+    ctx.textAlign = 'left';
+    ctx.fillText('✅', x + largura - 30, y + 22);
   }
 }
 
-function atualizarSelos(){
-  estacoes.forEach(e => {
-    const el = document.querySelector(`.selo[data-id="${e.id}"]`);
-    if(el) el.classList.toggle('feita', e.concluida);
+function desenharCena(){
+  const cena = corredor[posicaoAtual];
+  ctx.clearRect(0, 0, CENA_W, CENA_H);
+  desenharFundoCorredor();
+  desenharPrateleiraLateral(-1, '#3a2f22');
+  desenharPrateleiraLateral(1, '#3a2f22');
+  if(cena.tipo === 'estacao'){
+    desenharObjetoEstacao(cena, true);
+  }
+  desenharBracos();
+}
+
+/* =========================================================
+   NAVEGAÇÃO PELO CORREDOR
+   ========================================================= */
+const elBtnExaminar = document.getElementById('btnExaminar');
+const elBtnAndarEsq = document.getElementById('btnAndarEsq');
+const elBtnAndarDir = document.getElementById('btnAndarDir');
+const elOverlay = document.getElementById('overlayTransicao');
+const elNomeLocal = document.getElementById('nomeLocal');
+
+function criarTrilha(){
+  const el = document.getElementById('trilha');
+  el.innerHTML = corredor.map((c, i) => {
+    if(c.tipo === 'estacao') return `<div class="ponto estacao" data-idx="${i}">${c.emoji}</div>`;
+    return `<div class="ponto" data-idx="${i}"></div>`;
+  }).join('');
+}
+
+function atualizarTrilha(){
+  corredor.forEach((c, i) => {
+    const el = document.querySelector(`.trilha .ponto[data-idx="${i}"]`);
+    if(!el) return;
+    el.classList.toggle('atual', i === posicaoAtual);
+    if(c.tipo === 'estacao') el.classList.toggle('feita', estacoesInfo[c.estacaoId].concluida);
   });
-  document.getElementById('msgCompleto').classList.toggle('mostrar', estacoes.every(e => e.concluida));
+  document.getElementById('msgCompleto').classList.toggle(
+    'mostrar',
+    Object.values(estacoesInfo).every(e => e.concluida)
+  );
+}
+
+function renderizarCenaAtual(){
+  const cena = corredor[posicaoAtual];
+  elNomeLocal.textContent = cena.emoji + ' ' + cena.nome;
+  desenharCena();
+
+  elBtnAndarEsq.disabled = posicaoAtual === 0;
+  elBtnAndarDir.disabled = posicaoAtual === corredor.length - 1;
+
+  if(cena.tipo === 'estacao'){
+    elBtnExaminar.textContent = '👆 ' + estacoesInfo[cena.estacaoId].nome;
+    elBtnExaminar.classList.add('mostrar');
+  } else {
+    elBtnExaminar.classList.remove('mostrar');
+  }
+
+  atualizarTrilha();
+}
+
+function andar(direcao){
+  const novaPos = posicaoAtual + direcao;
+  if(novaPos < 0 || novaPos >= corredor.length) return;
+  elOverlay.style.opacity = '1';
+  setTimeout(() => {
+    posicaoAtual = novaPos;
+    renderizarCenaAtual();
+    setTimeout(() => { elOverlay.style.opacity = '0'; }, 40);
+  }, 140);
 }
 
 function comecarInteracao(){
-  if(!estacaoProxima) return;
-  iniciarFase(estacaoProxima.id);
+  const cena = corredor[posicaoAtual];
+  if(cena.tipo !== 'estacao') return;
+  iniciarFase(cena.estacaoId);
 }
 
 function voltarAoMapa(){
   mostrarTela('tela-mapa');
   elBarraFixa.classList.remove('mostrar');
-  mapaAtivo = true;
-  joyReset();
+  renderizarCenaAtual();
 }
+
+/* teclado, para quem testar no computador */
+window.addEventListener('keydown', e => {
+  if(document.getElementById('tela-mapa').classList.contains('ativa') === false) return;
+  const k = e.key.toLowerCase();
+  if(k === 'arrowleft') andar(-1);
+  if(k === 'arrowright') andar(1);
+  if((k === 'enter' || k === ' ') && corredor[posicaoAtual].tipo === 'estacao') comecarInteracao();
+});
+
+criarTrilha();
+renderizarCenaAtual();
 
 /* =========================================================
    INICIAR FASE (perguntas de uma estação)
    ========================================================= */
-function iniciarFase(numero){
-  mapaAtivo = false;
-  faseAtual = numero;
+function iniciarFase(id){
+  faseAtual = id;
   indiceAtual = 0;
   pontosFase = 0;
   dicasColetadas = [];
 
-  if(numero === 1) perguntas = embaralhar(bancoValidade);
-  if(numero === 2) perguntas = embaralhar(bancoAtendimento);
-  if(numero === 3) perguntas = embaralhar(bancoPreco);
-
+  perguntas = embaralhar(estacoesInfo[id].perguntas);
   pontosMaxFase = perguntas.length * 10;
 
   mostrarTela('tela-jogo');
@@ -891,9 +837,7 @@ function mostrarResultado(){
   elBarraFixa.classList.remove('mostrar');
   mostrarTela('tela-resultado');
 
-  const estacao = estacoes.find(e => e.id === faseAtual);
-  if(estacao) estacao.concluida = true;
-  atualizarSelos();
+  estacoesInfo[faseAtual].concluida = true;
 
   document.getElementById('pontosFase').textContent = pontosFase;
   document.getElementById('pontosFaseMax').textContent = pontosMaxFase;
