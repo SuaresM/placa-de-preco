@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Treinamento Supermercado</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Baloo+2:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  html,body{
+    min-height:100vh;
+    background:#1a1a2e;
+    color:#eef0f5;
+    font-family:'Fredoka', system-ui, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior:contain;
+  }
+  #app{
+    max-width:480px;
+    margin:0 auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+    overflow-x:hidden;
+  }
+
+  /* ===== HEADER ===== */
+  header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 16px;
+    background:#16213e;
+    border-bottom:1px solid #0f3460;
+    position:sticky;
+    top:0;
+    z-index:5;
+  }
+  header .logo{
+    font-family:'Baloo 2', sans-serif;
+    font-weight:800;
+    font-size:16px;
+    color:#e94560;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+  header .score-chip{
+    background:#0f3460;
+    border-radius:999px;
+    padding:6px 12px;
+    font-size:13px;
+    font-weight:600;
+    color:#ffd166;
+    display:flex;
+    align-items:center;
+    gap:6px;
+  }
+
+  main{
+    flex:1;
+    padding:18px 16px 90px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+
+  .screen{display:none;flex-direction:column;gap:16px;animation:fadeIn .25s ease;}
+  .screen.ativa{display:flex;}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+
+  /* ===== HOME ===== */
+  .hero{
+    text-align:center;
+    padding:14px 6px 4px;
+  }
+  .hero h1{
+    font-family:'Baloo 2', sans-serif;
+    font-size:26px;
+    color:#fff;
+    line-height:1.25;
+  }
+  .hero h1 span{color:#e94560;}
+  .hero p{
+    margin-top:8px;
+    font-size:14px;
+    color:#b9bcd0;
+  }
+
+  .fases{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .fase-card{
+    background:#16213e;
+    border:1px solid #0f3460;
+    border-radius:16px;
+    padding:16px;
+    display:flex;
+    align-items:center;
+    gap:14px;
+    cursor:pointer;
+    transition:transform .12s ease, border-color .12s ease;
+    text-align:left;
+    color:inherit;
+  }
+  .fase-card:active{transform:scale(.97);}
+  .fase-card .icone{
+    width:52px;height:52px;
+    min-width:52px;
+    border-radius:14px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:26px;
+  }
+  .fase-card .txt h3{font-size:16px;color:#fff;font-family:'Baloo 2',sans-serif;}
+  .fase-card .txt p{font-size:12.5px;color:#9498b3;margin-top:3px;}
+  .fase-card .seta{margin-left:auto;color:#e94560;font-size:20px;}
+
+  .fase-1 .icone{background:#2d6a4f33;color:#52d68f;}
+  .fase-2 .icone{background:#e9456020;color:#e94560;}
+  .fase-3 .icone{background:#4361ee22;color:#8aa4ff;}
+
+  .btn{
+    display:block;
+    width:100%;
+    padding:14px;
+    border:none;
+    border-radius:14px;
+    font-family:'Baloo 2', sans-serif;
+    font-weight:700;
+    font-size:15px;
+    cursor:pointer;
+    text-align:center;
+  }
+  .btn-primario{background:#e94560;color:#fff;}
+  .btn-primario:active{background:#d63852;}
+  .btn-secundario{background:#0f3460;color:#cfd6ff;}
+  .btn-fantasma{background:transparent;color:#9498b3;border:1px solid #2a2f52;}
+
+  /* ===== BARRA DE PROGRESSO DE FASE ===== */
+  .progresso-wrap{
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .progresso-bar{
+    flex:1;
+    height:8px;
+    background:#0f3460;
+    border-radius:99px;
+    overflow:hidden;
+  }
+  .progresso-fill{
+    height:100%;
+    background:linear-gradient(90deg,#e94560,#ff7a90);
+    border-radius:99px;
+    transition:width .3s ease;
+  }
+  .progresso-num{font-size:12px;color:#9498b3;white-space:nowrap;}
+
+  .voltar-topo{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    color:#9498b3;
+    font-size:13px;
+    cursor:pointer;
+    width:fit-content;
+  }
+
+  /* ===== CARTAO DE PERGUNTA ===== */
+  .card-jogo{
+    background:#16213e;
+    border:1px solid #0f3460;
+    border-radius:18px;
+    padding:20px 18px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .card-jogo .contexto{
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.06em;
+    color:#e94560;
+    font-weight:600;
+  }
+  .produto-visual{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    background:#1a1a40;
+    border:1px solid #0f3460;
+    border-radius:14px;
+    padding:14px;
+  }
+  .produto-visual .emoji{font-size:40px;}
+  .produto-visual .info h4{font-size:16px;color:#fff;font-family:'Baloo 2',sans-serif;}
+  .produto-visual .info p{font-size:13px;color:#9498b3;margin-top:2px;}
+  .produto-visual .info .destaque{color:#ffd166;font-weight:700;}
+
+  .duas-colunas{display:flex;gap:10px;}
+  .mini-info{
+    flex:1;
+    background:#1a1a40;
+    border:1px solid #0f3460;
+    border-radius:12px;
+    padding:10px 12px;
+    text-align:center;
+  }
+  .mini-info span{display:block;font-size:11px;color:#9498b3;margin-bottom:3px;}
+  .mini-info strong{font-size:15px;color:#fff;}
+
+  .pergunta-txt{font-size:15px;color:#e4e6f0;line-height:1.4;}
+
+  .opcoes{display:flex;flex-direction:column;gap:10px;}
+  .opcao{
+    background:#1a1a40;
+    border:1.5px solid #0f3460;
+    border-radius:12px;
+    padding:13px 14px;
+    font-size:14px;
+    color:#e4e6f0;
+    text-align:left;
+    cursor:pointer;
+  }
+  .opcao:active{transform:scale(.98);}
+  .opcao.certa{background:#153d2b;border-color:#2d9d63;color:#8ef0b5;}
+  .opcao.errada{background:#3d1520;border-color:#c0435c;color:#ff9fb2;}
+  .opcao[disabled]{pointer-events:none;}
+
+  .duas-op{display:flex;gap:10px;}
+  .duas-op .opcao{flex:1;text-align:center;font-weight:700;}
+
+  /* feedback */
+  .feedback{
+    border-radius:14px;
+    padding:14px;
+    font-size:13.5px;
+    line-height:1.45;
+    display:none;
+  }
+  .feedback.mostrar{display:block;animation:fadeIn .2s ease;}
+  .feedback.ok{background:#153d2b;border:1px solid #2d9d63;color:#c8f5da;}
+  .feedback.mal{background:#3d1520;border:1px solid #c0435c;color:#ffd0da;}
+  .feedback b{display:block;margin-bottom:4px;font-family:'Baloo 2',sans-serif;font-size:14.5px;}
+
+  /* ===== RESULTADO ===== */
+  .resultado{
+    text-align:center;
+    padding:20px 8px;
+  }
+  .resultado .medalha{font-size:64px;}
+  .resultado h2{font-family:'Baloo 2',sans-serif;font-size:22px;color:#fff;margin-top:6px;}
+  .resultado p{color:#9498b3;font-size:14px;margin-top:6px;}
+  .placar-grande{
+    font-family:'Baloo 2',sans-serif;
+    font-size:44px;
+    color:#ffd166;
+    margin:14px 0 4px;
+  }
+  .dicas-final{
+    background:#16213e;
+    border:1px solid #0f3460;
+    border-radius:14px;
+    padding:14px 16px;
+    text-align:left;
+    font-size:13.5px;
+    color:#cfd2e6;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .dicas-final li{margin-left:16px;}
+
+  footer.barra-fixa{
+    position:fixed;
+    bottom:0;left:0;right:0;
+    max-width:480px;
+    margin:0 auto;
+    background:#16213e;
+    border-top:1px solid #0f3460;
+    padding:12px 16px;
+    display:none;
+  }
+  footer.barra-fixa.mostrar{display:block;}
+</style>
+</head>
+<body>
+<div id="app">
+
+  <header>
+    <div class="logo">🛒 Treino de Loja</div>
+    <div class="score-chip">⭐ <span id="pontosHeader">0</span> pts</div>
+  </header>
+
+  <main>
+
+    <!-- ===================== TELA INICIAL ===================== -->
+    <section class="screen ativa" id="tela-home">
+      <div class="hero">
+        <h1>Aprenda a trabalhar<br>no <span>supermercado</span> jogando</h1>
+        <p>Três desafios rápidos sobre o dia a dia da loja. Vale ponto, vale treino de verdade.</p>
+      </div>
+
+      <div class="fases">
+        <button class="fase-card fase-1" onclick="iniciarFase(1)">
+          <div class="icone">📅</div>
+          <div class="txt">
+            <h3>Confira a Validade</h3>
+            <p>Descubra o que pode ficar na prateleira</p>
+          </div>
+          <div class="seta">›</div>
+        </button>
+
+        <button class="fase-card fase-2" onclick="iniciarFase(2)">
+          <div class="icone">🏷️</div>
+          <div class="txt">
+            <h3>Confira o Preço</h3>
+            <p>Etiqueta bateu com o sistema?</p>
+          </div>
+          <div class="seta">›</div>
+        </button>
+
+        <button class="fase-card fase-3" onclick="iniciarFase(3)">
+          <div class="icone">🙋</div>
+          <div class="txt">
+            <h3>Atendimento ao Cliente</h3>
+            <p>Escolha a melhor resposta</p>
+          </div>
+          <div class="seta">›</div>
+        </button>
+      </div>
+    </section>
+
+    <!-- ===================== TELA DE JOGO (fases 1,2,3) ===================== -->
+    <section class="screen" id="tela-jogo">
+      <div class="voltar-topo" onclick="voltarHome()">‹ voltar ao início</div>
+
+      <div class="progresso-wrap">
+        <div class="progresso-bar"><div class="progresso-fill" id="progressoFill"></div></div>
+        <div class="progresso-num" id="progressoNum">1/8</div>
+      </div>
+
+      <div class="card-jogo" id="cardJogo">
+        <!-- preenchido via JS -->
+      </div>
+
+      <div class="feedback" id="feedbackBox"></div>
+    </section>
+
+    <!-- ===================== TELA RESULTADO ===================== -->
+    <section class="screen" id="tela-resultado">
+      <div class="resultado">
+        <div class="medalha" id="medalhaFinal">🏅</div>
+        <h2 id="tituloResultado">Fase concluída!</h2>
+        <div class="placar-grande"><span id="pontosFase">0</span>/<span id="pontosFaseMax">80</span></div>
+        <p id="mensagemResultado">Continue praticando para virar expert.</p>
+      </div>
+
+      <div class="dicas-final">
+        <b style="font-family:'Baloo 2',sans-serif;color:#fff;">📌 Pontos de atenção desta fase</b>
+        <ul id="listaDicas" style="display:flex;flex-direction:column;gap:8px;padding-left:2px;"></ul>
+      </div>
+
+      <button class="btn btn-primario" onclick="repetirFase()">Jogar esta fase de novo</button>
+      <button class="btn btn-fantasma" onclick="voltarHome()">Voltar ao menu</button>
+    </section>
+
+  </main>
+
+  <footer class="barra-fixa" id="barraFixa">
+    <button class="btn btn-primario" id="btnAvancar" onclick="proximaPergunta()" disabled>Responda para continuar</button>
+  </footer>
+
+</div>
+
+<script>
+/* =========================================================
+   DADOS DO JOGO
+   ========================================================= */
+
+// ---------- FASE 1: VALIDADE ----------
+// "hoje" fixado dentro do jogo, só para ensinar a lógica
+const HOJE_JOGO = "10/09/2026";
+
+const bancoValidade = [
+  {emoji:"🥛", nome:"Leite Integral", venc:"08/09/2026", vencido:true, dica:"O leite venceu 2 dias atrás — precisa ser recolhido da prateleira imediatamente."},
+  {emoji:"🍞", nome:"Pão de Forma", venc:"11/09/2026", vencido:false, dica:"Vence amanhã: pode vender, mas é bom colocar na frente para sair primeiro (regra do PVPS)."},
+  {emoji:"🧀", nome:"Queijo Mussarela", venc:"05/09/2026", vencido:true, dica:"Já venceu há 5 dias. Produto vencido nunca pode ficar exposto, mesmo que pareça normal."},
+  {emoji:"🥫", nome:"Molho de Tomate", venc:"20/12/2026", vencido:false, dica:"Ainda tem validade longa, pode ficar na prateleira normalmente."},
+  {emoji:"🍫", nome:"Chocolate ao Leite", venc:"10/09/2026", vencido:false, dica:"Vence hoje: ainda pode ser vendido no dia do vencimento, mas deve sair da prateleira amanhã."},
+  {emoji:"🥩", nome:"Carne Moída Resfriada", venc:"09/09/2026", vencido:true, dica:"Produto perecível vencido ontem — risco à saúde do cliente. Retirar sempre, sem exceção."},
+  {emoji:"🍚", nome:"Arroz Branco 5kg", venc:"15/03/2027", vencido:false, dica:"Validade bem longa, item de mercearia seca sem risco."},
+  {emoji:"🍦", nome:"Sorvete de Massa", venc:"01/09/2026", vencido:true, dica:"Venceu há mais de uma semana. Retirar e registrar a perda conforme o procedimento da loja."},
+];
+
+// ---------- FASE 2: CONFERÊNCIA DE PREÇO ----------
+const bancoPreco = [
+  {emoji:"🧴", nome:"Sabonete Líquido", etiqueta:"7,49", sistema:"7,49", correto:true,
+    dica:"Etiqueta e sistema batendo: tudo certo, só seguir o fluxo normal."},
+  {emoji:"🥤", nome:"Refrigerante 2L", etiqueta:"6,99", sistema:"8,49", correto:false,
+    dica:"Pela lei, quando o preço da etiqueta é menor que o do sistema, o cliente paga o valor da etiqueta (o menor). Avise o setor de precificação para corrigir."},
+  {emoji:"🍪", nome:"Biscoito Recheado", etiqueta:"3,29", sistema:"3,29", correto:true,
+    dica:"Preços iguais: nenhuma ação extra é necessária."},
+  {emoji:"🧻", nome:"Papel Higiênico 12un", etiqueta:"22,90", sistema:"19,90", correto:false,
+    dica:"Aqui a etiqueta está mais cara que o sistema — não prejudica o cliente, mas ainda é uma divergência: informe para a etiqueta ser atualizada."},
+  {emoji:"🧃", nome:"Suco de Caixinha", etiqueta:"4,50", sistema:"4,50", correto:true,
+    dica:"Tudo certo, sem divergência."},
+  {emoji:"🍬", nome:"Bala de Goma 500g", etiqueta:"12,00", sistema:"14,00", correto:false,
+    dica:"Divergência a favor do cliente: pela etiqueta, ele paga o menor valor (R$ 12,00). Registre a correção do sistema depois."},
+  {emoji:"🧂", nome:"Sal Refinado 1kg", etiqueta:"2,99", sistema:"2,99", correto:true,
+    dica:"Preços conferem, pode seguir normalmente."},
+  {emoji:"🍫", nome:"Barra de Chocolate", etiqueta:"5,90", sistema:"6,90", correto:false,
+    dica:"Cliente paga o preço da etiqueta (o menor). Depois, chame o responsável para corrigir a etiqueta ou o sistema."},
+];
+
+// ---------- FASE 3: ATENDIMENTO ----------
+const bancoAtendimento = [
+  {
+    situacao:"Um cliente pergunta onde fica o açúcar, mas você está no meio de uma tarefa.",
+    opcoes:[
+      {t:"Aponta na direção e continua a tarefa.", nivel:0},
+      {t:"Explica o corredor certo com um sorriso, sem se deslocar.", nivel:1},
+      {t:"Para o que está fazendo e acompanha o cliente até o produto.", nivel:2},
+    ],
+    dica:"Sempre que possível, acompanhe o cliente até o produto. Isso melhora muito a experiência de compra."
+  },
+  {
+    situacao:"No caixa, o cliente reclama que o preço cobrado é maior do que o da etiqueta na prateleira.",
+    opcoes:[
+      {t:"Diz que o sistema está sempre certo e cobra o valor cheio.", nivel:0},
+      {t:"Pede desculpas, respeita o preço da etiqueta e chama o supervisor para corrigir depois.", nivel:2},
+      {t:"Ignora e manda o cliente falar com o gerente.", nivel:0},
+    ],
+    dica:"Por lei, prevalece o menor preço entre etiqueta e sistema. Resolva na hora e avise para corrigir a etiqueta ou o cadastro."
+  },
+  {
+    situacao:"A fila do caixa está grande e um cliente começa a ficar impaciente.",
+    opcoes:[
+      {t:"Continua no seu ritmo normal, sem falar nada.", nivel:0},
+      {t:"Pede desculpas pela espera e chama outro operador para abrir um caixa, se possível.", nivel:2},
+      {t:"Discute com o cliente dizendo que não pode fazer nada.", nivel:0},
+    ],
+    dica:"Reconhecer a espera e agir (chamar reforço) já reduz muito a insatisfação do cliente."
+  },
+  {
+    situacao:"Um cliente encontra um produto vencido na prateleira e mostra para você.",
+    opcoes:[
+      {t:"Agradece o aviso, recolhe o produto e registra a ocorrência.", nivel:2},
+      {t:"Diz que não é sua função e segue em frente.", nivel:0},
+      {t:"Pega o produto e devolve na prateleira sem falar nada.", nivel:0},
+    ],
+    dica:"Agradecer e agir na hora mostra cuidado com o cliente e evita risco à saúde de outras pessoas."
+  },
+  {
+    situacao:"Um cliente quer trocar um produto, mas esqueceu a nota fiscal em casa.",
+    opcoes:[
+      {t:"Recusa a troca na hora, sem explicar nada.", nivel:0},
+      {t:"Explica com calma a política de trocas da loja e as alternativas possíveis.", nivel:2},
+      {t:"Faz a troca sem verificar nada, para não discutir.", nivel:0},
+    ],
+    dica:"Explicar a política com calma evita mal-entendidos e mantém a confiança do cliente na loja."
+  },
+  {
+    situacao:"Você percebe que um cliente idoso está com dificuldade para alcançar um produto na prateleira alta.",
+    opcoes:[
+      {t:"Espera ele pedir ajuda antes de agir.", nivel:0},
+      {t:"Se oferece para ajudar antes mesmo de ser solicitado.", nivel:2},
+      {t:"Finge que não viu e continua a tarefa.", nivel:0},
+    ],
+    dica:"Antecipar a necessidade do cliente é um dos diferenciais de um bom atendimento."
+  },
+];
+
+/* =========================================================
+   ESTADO DO JOGO
+   ========================================================= */
+let pontosTotais = 0;
+let faseAtual = 0;
+let perguntas = [];
+let indiceAtual = 0;
+let pontosFase = 0;
+let pontosMaxFase = 0;
+let dicasColetadas = [];
+let respondida = false;
+
+const elPontosHeader = document.getElementById('pontosHeader');
+const elCardJogo = document.getElementById('cardJogo');
+const elFeedback = document.getElementById('feedbackBox');
+const elProgressoFill = document.getElementById('progressoFill');
+const elProgressoNum = document.getElementById('progressoNum');
+const elBarraFixa = document.getElementById('barraFixa');
+const elBtnAvancar = document.getElementById('btnAvancar');
+
+function embaralhar(lista){
+  const copia = [...lista];
+  for(let i = copia.length - 1; i > 0; i--){
+    const j = Math.floor(Math.random() * (i + 1));
+    [copia[i], copia[j]] = [copia[j], copia[i]];
+  }
+  return copia;
+}
+
+function mostrarTela(id){
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('ativa'));
+  document.getElementById(id).classList.add('ativa');
+}
+
+function voltarHome(){
+  mostrarTela('tela-home');
+  elBarraFixa.classList.remove('mostrar');
+}
+
+/* =========================================================
+   INICIAR FASE
+   ========================================================= */
+function iniciarFase(numero){
+  faseAtual = numero;
+  indiceAtual = 0;
+  pontosFase = 0;
+  dicasColetadas = [];
+
+  if(numero === 1) perguntas = embaralhar(bancoValidade);
+  if(numero === 2) perguntas = embaralhar(bancoPreco);
+  if(numero === 3) perguntas = embaralhar(bancoAtendimento);
+
+  pontosMaxFase = perguntas.length * 10;
+
+  mostrarTela('tela-jogo');
+  elBarraFixa.classList.add('mostrar');
+  renderPergunta();
+}
+
+function repetirFase(){
+  iniciarFase(faseAtual);
+}
+
+function atualizarProgresso(){
+  const pct = (indiceAtual / perguntas.length) * 100;
+  elProgressoFill.style.width = pct + '%';
+  elProgressoNum.textContent = (indiceAtual + 1) + '/' + perguntas.length;
+}
+
+/* =========================================================
+   RENDERIZAR PERGUNTA (por fase)
+   ========================================================= */
+function renderPergunta(){
+  respondida = false;
+  elFeedback.classList.remove('mostrar', 'ok', 'mal');
+  elFeedback.innerHTML = '';
+  elBtnAvancar.disabled = true;
+  elBtnAvancar.textContent = 'Responda para continuar';
+  atualizarProgresso();
+
+  const item = perguntas[indiceAtual];
+
+  if(faseAtual === 1) renderValidade(item);
+  if(faseAtual === 2) renderPreco(item);
+  if(faseAtual === 3) renderAtendimento(item);
+}
+
+function renderValidade(item){
+  elCardJogo.innerHTML = `
+    <div class="contexto">Hoje na loja: ${HOJE_JOGO}</div>
+    <div class="produto-visual">
+      <div class="emoji">${item.emoji}</div>
+      <div class="info">
+        <h4>${item.nome}</h4>
+        <p>Validade: <span class="destaque">${item.venc}</span></p>
+      </div>
+    </div>
+    <div class="pergunta-txt">Esse produto pode continuar exposto na prateleira?</div>
+    <div class="duas-op">
+      <button class="opcao" data-ok="false" onclick="responder(this)">🗑️ Retirar (vencido)</button>
+      <button class="opcao" data-ok="true" onclick="responder(this)">✅ Pode vender</button>
+    </div>
+  `;
+  window._respostaCerta = !item.vencido; // "pode vender" = true quando NÃO vencido
+  window._dicaAtual = item.dica;
+}
+
+function renderPreco(item){
+  elCardJogo.innerHTML = `
+    <div class="contexto">Conferência na prateleira</div>
+    <div class="produto-visual">
+      <div class="emoji">${item.emoji}</div>
+      <div class="info"><h4>${item.nome}</h4></div>
+    </div>
+    <div class="duas-colunas">
+      <div class="mini-info"><span>Etiqueta da prateleira</span><strong>R$ ${item.etiqueta}</strong></div>
+      <div class="mini-info"><span>Preço no sistema</span><strong>R$ ${item.sistema}</strong></div>
+    </div>
+    <div class="pergunta-txt">Os preços estão corretos, sem divergência?</div>
+    <div class="duas-op">
+      <button class="opcao" data-ok="false" onclick="responder(this)">⚠️ Tem divergência</button>
+      <button class="opcao" data-ok="true" onclick="responder(this)">✅ Está correto</button>
+    </div>
+  `;
+  window._respostaCerta = item.correto;
+  window._dicaAtual = item.dica;
+}
+
+function renderAtendimento(item){
+  const opcoesEmbaralhadas = embaralhar(item.opcoes.map((o, i) => ({...o, _i:i})));
+  const opcoesHtml = opcoesEmbaralhadas.map(o =>
+    `<button class="opcao" data-nivel="${o.nivel}" onclick="responderAtendimento(this)">${o.t}</button>`
+  ).join('');
+
+  elCardJogo.innerHTML = `
+    <div class="contexto">Situação no salão de vendas</div>
+    <div class="pergunta-txt" style="font-size:15.5px;">${item.situacao}</div>
+    <div class="opcoes">${opcoesHtml}</div>
+  `;
+  window._dicaAtual = item.dica;
+}
+
+/* =========================================================
+   RESPONDER — fases 1 e 2 (certo/errado binário)
+   ========================================================= */
+function responder(botao){
+  if(respondida) return;
+  respondida = true;
+
+  const escolhaOk = botao.dataset.ok === 'true';
+  const acertou = escolhaOk === window._respostaCerta;
+
+  document.querySelectorAll('.opcao').forEach(op => {
+    op.disabled = true;
+    const opOk = op.dataset.ok === 'true';
+    if(opOk === window._respostaCerta) op.classList.add('certa');
+    else if(op === botao) op.classList.add('errada');
+  });
+
+  darFeedback(acertou, acertou ? 10 : 0);
+}
+
+/* =========================================================
+   RESPONDER — fase 3 (nível 0/1/2 de qualidade da resposta)
+   ========================================================= */
+function responderAtendimento(botao){
+  if(respondida) return;
+  respondida = true;
+
+  const nivel = parseInt(botao.dataset.nivel, 10);
+  const pontosGanhos = nivel === 2 ? 10 : (nivel === 1 ? 5 : 0);
+
+  document.querySelectorAll('.opcao').forEach(op => {
+    op.disabled = true;
+    const n = parseInt(op.dataset.nivel, 10);
+    if(n === 2) op.classList.add('certa');
+    else if(op === botao && n < 2) op.classList.add('errada');
+  });
+
+  darFeedback(nivel === 2, pontosGanhos, nivel);
+}
+
+function darFeedback(acertouTotal, pontosGanhos, nivelAtendimento){
+  pontosFase += pontosGanhos;
+  pontosTotais += pontosGanhos;
+  elPontosHeader.textContent = pontosTotais;
+
+  if(!dicasColetadas.includes(window._dicaAtual)) dicasColetadas.push(window._dicaAtual);
+
+  elFeedback.classList.add('mostrar');
+  if(acertouTotal){
+    elFeedback.classList.add('ok');
+    elFeedback.innerHTML = `<b>✅ Isso mesmo! (+${pontosGanhos} pts)</b>${window._dicaAtual}`;
+  } else if(pontosGanhos > 0){
+    elFeedback.classList.add('ok');
+    elFeedback.innerHTML = `<b>🙂 Aceitável, mas dá pra melhorar (+${pontosGanhos} pts)</b>${window._dicaAtual}`;
+  } else {
+    elFeedback.classList.add('mal');
+    elFeedback.innerHTML = `<b>❌ Não foi dessa vez (+0 pts)</b>${window._dicaAtual}`;
+  }
+
+  elBtnAvancar.disabled = false;
+  elBtnAvancar.textContent = (indiceAtual === perguntas.length - 1) ? 'Ver resultado da fase' : 'Próxima pergunta ›';
+}
+
+function proximaPergunta(){
+  if(elBtnAvancar.disabled) return;
+  indiceAtual++;
+  if(indiceAtual >= perguntas.length){
+    mostrarResultado();
+  } else {
+    renderPergunta();
+  }
+}
+
+/* =========================================================
+   TELA DE RESULTADO
+   ========================================================= */
+function mostrarResultado(){
+  elBarraFixa.classList.remove('mostrar');
+  mostrarTela('tela-resultado');
+
+  document.getElementById('pontosFase').textContent = pontosFase;
+  document.getElementById('pontosFaseMax').textContent = pontosMaxFase;
+
+  const pct = pontosFase / pontosMaxFase;
+  let medalha = '🥉', titulo = 'Ainda dá pra evoluir', msg = 'Revise a fase e tente de novo — a prática leva à confiança.';
+  if(pct >= 0.9){ medalha = '🏆'; titulo = 'Mandou muito bem!'; msg = 'Você domina essa parte do dia a dia da loja.'; }
+  else if(pct >= 0.6){ medalha = '🥈'; titulo = 'Muito bom!'; msg = 'Está no caminho certo, só afinar alguns detalhes.'; }
+
+  document.getElementById('medalhaFinal').textContent = medalha;
+  document.getElementById('tituloResultado').textContent = titulo;
+  document.getElementById('mensagemResultado').textContent = msg;
+
+  const listaDicas = document.getElementById('listaDicas');
+  listaDicas.innerHTML = dicasColetadas.length
+    ? dicasColetadas.map(d => `<li>${d}</li>`).join('')
+    : '<li>Você acertou tudo de primeira, sem pontos de atenção!</li>';
+}
+</script>
+</body>
+</html>
